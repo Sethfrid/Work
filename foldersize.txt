@@ -1,0 +1,2 @@
+$foldersize = (Get-ChildItem c:\Intel\Logs -recurse | Measure-Object -property length -sum) 
+"Folder Size: " + "{0:N2}" -f ($foldersize.sum / 1GB) + " GB"  
