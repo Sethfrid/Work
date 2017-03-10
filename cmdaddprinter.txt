@@ -1,1 +1,1 @@
-rundll32 printui.dll,PrintUIEntry /in /q /n "\\ps-live.onealternative.net\Follow Me Printer"
+rundll32 printui.dll,PrintUIEntry /in /q /n "\\printer path"
