@@ -1,0 +1,2 @@
+get-acl "Folder Location" | select accesstostring | export-csv rest.csv 
+#need to open in libreoffice, formatting is off in excel
