@@ -1,1 +1,1 @@
-Test-ComputerSecurechannel -credential altnet.ads\svca-bel -Repair
+Test-ComputerSecurechannel -credential domain\admincred -Repair
