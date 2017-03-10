@@ -1,0 +1,11 @@
+$Path = "$env:username\Appdata\Local\Microsoft\Outlook\*.pst"
+<# or this line if the computer has had many users 
+$Path = "C:\Users\*\Appdata\Local\Microsoft\Outlook\*.pst"
+#>
+Get-ChildItem -Path $Path |Where-Object CreationTime -lt (Get-Date).AddDays(-30) |Remove-item -recurse
+
+<# need to test
+stop-process -ProcessName OUTLOOK
+remove-item -path C:\Users\*\Appdata\Local\Microsoft\Outlook\*.pst -Recurse -Force
+Start-Process -FilePath "C:\Program Files (x86)\Microsoft Office\Office14\outlook.exe"
+#>
