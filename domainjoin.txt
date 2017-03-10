@@ -1,1 +1,1 @@
-Add-Computer -DomainName domain -Credential altnet.ads\svca-bbel -Restart
+Add-Computer -DomainName domain -Credential domain\admincred -Restart
