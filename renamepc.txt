@@ -1,0 +1,1 @@
+Rename-Computer -ComputerName "ANO4210" -NewName "AN04210" -DomainCredential altnet.ads\svca-bel -Force
