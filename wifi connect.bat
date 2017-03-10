@@ -1,0 +1,1 @@
+nets wlan connect ssid="AN-MEDIA" key="Putt1ngH3rThroughC0llage!"
