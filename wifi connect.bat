@@ -1,1 +1,1 @@
-nets wlan connect ssid="AN-MEDIA" key="Putt1ngH3rThroughC0llage!"
+nets wlan connect ssid="SSID Here" key="password"
