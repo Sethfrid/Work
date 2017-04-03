@@ -8,7 +8,7 @@ ForEach ($file in $Data)
 
 {
 
-%{&$folder\RAR.exe a -r $folder\$file.rar $File}
+%{&$folder\RAR.exe a -r -ai $folder\$file.rar $File}
 
 }
 
