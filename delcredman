@@ -1,0 +1,5 @@
+<#
+A work in progress to delete store credentials via ps 
+#>
+
+remove-item c\users\env:userprofile\appdata\roaming\microsoft\credentials\*.* -force
