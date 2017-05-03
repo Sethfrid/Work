@@ -1,5 +1,5 @@
 ﻿<#
-Add a timestamp to each archive file and move them onto a backup location
+Add a date stamp to each archive file and move them onto a backup location
 #>
 
 $dest = "\\ntanet1\salesforcebackup"
