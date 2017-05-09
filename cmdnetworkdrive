@@ -1,31 +1,5 @@
 #to use command line to add a network drive which would be faster than powershell
 
-net use k: \\172.16.40.127\Sage /P:Yes
+net use k: \\location /P:Yes
 
-net use k: \\ntanet1\Data /P:Yes
 
-net use p: \\ntanet1\Accounts /P:Yes
-
-net use n: \\ntanet1\telemarketing  /P:Yes
-
-net use n: \\ansystems\ops\service delivery management /P:Yes
-
-net use t: \\ansystems\clients /P:Yes
-
-net use t: \\alt-bfs01\Team Shares\Technical Operations  /P:Yes
-
-net use n: \\sn-nas.snplc.local\shares /P:Yes
-
-net use p: \\echoshare\public /P:Yes
-
-net use r: \\echoshare\accounts /P:Yes
-
-net use s: \\ntanet1\pricing /P:Yes
-
-net use x: \\sharepoint\crm /P:Yes
-
-net use z: \\onealternative.net\fileservices\Team Shares\Human Resources /P:Yes
-
-net use y: \\ntanet1\Academy /P:Yes
-
-net use g: \\ntanet1\Project Management /P:Yes
