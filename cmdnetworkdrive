@@ -12,6 +12,8 @@ net use n: \\ansystems\ops\service delivery management /P:Yes
 
 net use t: \\ansystems\clients /P:Yes
 
+net use t: \\alt-bfs01\Team Shares\Technical Operations  /P:Yes
+
 net use n: \\sn-nas.snplc.local\shares /P:Yes
 
 net use p: \\echoshare\public /P:Yes
