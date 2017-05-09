@@ -4,5 +4,4 @@ Bitlocker key for a single computer, newest result at the bottom
 
 $computer = get-adcomputer computername
 
-Get-ADObject -Filter 'ObjectClass -eq "msFVE-RecoveryInformation"' -SearchBase $Computer.DistinguishedName -Properties "msFVE-RecoveryPa
-ssword"
+Get-ADObject -Filter 'ObjectClass -eq "msFVE-RecoveryInformation"' -SearchBase $Computer.DistinguishedName -Properties "msFVE-RecoveryPassword" | select msFVE-RecoveryPassword
