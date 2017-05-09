@@ -52,6 +52,8 @@ New-PSDrive -Name "R" -PSProvider Filesystem -Root "\\ntanet1\pricing" -Persist
 
 New-PSDrive -Name "T" -PSProvider Filesystem -Root "\\ansystems\clients" -Persist
 
+New-PSDrive -Name "T" -PSProvider Filesystem -Root "\\alt-bfs01\Team Shares\Technical Operations" -Persist
+
 #####
 
 #X Drive
