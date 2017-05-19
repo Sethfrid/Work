@@ -1,0 +1,5 @@
+# set AD password without opening up AD as it is slow to load up
+
+$user = read-host 'Enter username'
+
+set-adaccountpassword -identity $user -Reset - Newpassword (ConvertTo-SecureString -AsPlainText "Password1" -Force)
