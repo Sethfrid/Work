@@ -1,0 +1,5 @@
+<#
+For when loading up AD is slow  
+#>
+
+remove-adcomputer -Identity "computername"
