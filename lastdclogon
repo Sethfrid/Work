@@ -1,0 +1,3 @@
+#To give a list of computers and their last logon date
+
+get-adcomputer -filter * -properties * select Name, Lastlogondate | where {$_.Name -like "..."}
