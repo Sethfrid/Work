@@ -1,1 +1,1 @@
-Add-Printer -ConnectionName \\ps-live.onealternative.net\Follow Me Printer
+Add-Printer -ConnectionName \\location
