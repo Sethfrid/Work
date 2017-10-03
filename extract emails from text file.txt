@@ -1,0 +1,10 @@
+#<
+With thanks to Joseph McCray on parsing logs. https://www.youtube.com/watch?v=dYrY8tbGz5M
+>#
+
+
+$inputfile =
+$outfile = 
+
+$emails = '\b[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4\b}'
+select-string -Path $inputfile -pattern $emails -AllMatches | % {$_.Matches } | % { $_.value} > $outfile
