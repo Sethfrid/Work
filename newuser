@@ -1,0 +1,5 @@
+new-aduser fname.lname -OtherAttributes @{title="";mail="fname.lname@ukfinance.org.uk"}
+
+set-adaccountpassword (read-host 'user') -r
+
+add-adgroupmember -identity sec-emsE5, sec-0365e5 -member fname.lname
