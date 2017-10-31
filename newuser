@@ -1,7 +1,19 @@
+# create a new user
 new-aduser fname.lname -OtherAttributes @{title="";mail="fname.lname@ukfinance.org.uk"}
 
+# create a password
 set-adaccountpassword (read-host 'user') -r
 
+or
+
+# assign preset password to a user
+Set-ADAccountPassword -identity SAMACCOUNT -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "!1Password" -Force)
+
+# prompt user to change password
+Set-ADUser SAMACCOUNT -ChangePasswordAtLogon $True
+
+# add new user to particular groups
 add-adgroupmember -identity sec-emsE5, sec-0365e5 -member fname.lname
 
+# aset proxy address
 Set-ItemProperty -Filter "proxyAddresses=email address"
