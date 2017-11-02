@@ -1,4 +1,4 @@
-new-aduser SAMACCOUNT
+new-aduser -SamAccountName "fname.lname" -GivenName "fname" -Surname "Lname" -DisplayName "fname lname" -path 'OU=Users,OU=Managed Users,DC=,DC=org,DC=uk'
 
 Set-ADAccountPassword -identity SAMACCOUNT -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "!1Password" -Force)
 
@@ -8,7 +8,7 @@ add-adgroupmember -identity "sec-emsE5" "SAMACCOUNT"
 
 add-adgroupmember -identity "sec-o365e5" "SAMACCOUNT"
 
-set-aduser SAMACCOUNT -replace @{first name=""; last name=""; display name=""; title=""; user logon name=""; proxyAddresses="SMTP:@domain"; email="@domain}
+set-aduser SAMACCOUNT -replace @{title=""; user logon name=""; proxyAddresses="SMTP:@domain"; email="@domain}
 
 Get-ADUser SAMACCOUNT | Move-ADObject -TargetPath 'OU=Finance,DC=Fabrikam,Dc=com'
 
