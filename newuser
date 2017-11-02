@@ -8,10 +8,6 @@ add-adgroupmember -identity "sec-emsE5" "SAMACCOUNT"
 
 add-adgroupmember -identity "sec-o365e5" "SAMACCOUNT"
 
-set-aduser SAMACCOUNT -replace @{proxyAddresses="@ukfinance.org.uk"}
-
-set-aduser SAMACCOUNT -replace @{email="@ukfinance.org.uk"}
-
-set-aduser SAMACCOUNT -replace @{title=""}
+set-aduser SAMACCOUNT -replace @{first name=""; last name=""; display name=""; title=""; user logon name=""; proxyAddresses="SMTP:@domain"; email="@domain}
 
 enable-adaccount SAMACCOUNT
