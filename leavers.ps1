@@ -1,4 +1,8 @@
-﻿set-aduser samaccount -manager $null
+set-aduser samaccount -manager $null
+ 
+set-aduser samaccount -email $null
+
+Set-ItemProperty -Filter "proxyAddresses=null"
 
 get-adprinciplegroupmembership samaccount | where {$_.Name -notlike "Domain Users"} |% {Remove-AdPrincipleGroupmembership samaccount -memberof $_ -Confirm:$false}
 
