@@ -13,3 +13,5 @@ set-aduser SAMACCOUNT -replace @{proxyAddresses="@doamin"}
 set-aduser SAMACCOUNT -replace @{email="@domain"}
 
 set-aduser SAMACCOUNT -replace @{title=""}
+
+enable-adaccount SAMACCOUNT
