@@ -10,6 +10,4 @@ add-adgroupmember -identity "sec-o365e5" "SAMACCOUNT"
 
 set-aduser SAMACCOUNT -replace @{title=""; user logon name=""; proxyAddresses="SMTP:@domain"; email="@domain}
 
-Get-ADUser SAMACCOUNT | Move-ADObject -TargetPath 'OU=Finance,DC=Fabrikam,Dc=com'
-
 enable-adaccount SAMACCOUNT
