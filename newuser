@@ -2,15 +2,15 @@ new-aduser SAMACCOUNT
 
 Set-ADAccountPassword -identity SAMACCOUNT -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "!1Password" -Force)
 
-Set-ADUser janet.campbell -ChangePasswordAtLogon $True
+Set-ADUser SAMACCOUNT -ChangePasswordAtLogon $True
 
 add-adgroupmember -identity "sec-emsE5" "SAMACCOUNT"
 
 add-adgroupmember -identity "sec-o365e5" "SAMACCOUNT"
 
-set-aduser SAMACCOUNT -replace @{proxyAddresses="@doamin"}
+set-aduser SAMACCOUNT -replace @{proxyAddresses="@ukfinance.org.uk"}
 
-set-aduser SAMACCOUNT -replace @{email="@domain"}
+set-aduser SAMACCOUNT -replace @{email="@ukfinance.org.uk"}
 
 set-aduser SAMACCOUNT -replace @{title=""}
 
