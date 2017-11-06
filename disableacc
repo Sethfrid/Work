@@ -1,5 +1,0 @@
-<#
-Accessing powershell is faster than loading the AD
-#>
-
-disable-adaccount "samaccount"
