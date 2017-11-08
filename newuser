@@ -1,4 +1,4 @@
-new-aduser -SamAccountName "fname.lname" -GivenName "fname" -Surname "Lname" -DisplayName "fname lname" -path 'OU=Users,OU=Managed Users,DC=,DC=org,DC=uk'
+new-aduser -SamAccountName "fname.lname" -GivenName "fname" -Surname "Lname" -DisplayName "fname lname" -company "Company" -path 'OU=Users,OU=Managed Users,DC=,DC=org,DC=uk'
 
 Set-ADAccountPassword -identity SAMACCOUNT -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "!1Password" -Force)
 
