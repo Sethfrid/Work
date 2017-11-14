@@ -1,0 +1,3 @@
+# Find out which users are connected onto a DFS
+
+gwmi win32_serverconnection | select username -unique
