@@ -1,4 +1,4 @@
-new-aduser -SamAccountName "fname.lname" -GivenName "fname" -Surname "Lname" -DisplayName "fname lname" -company "Company" -path 'OU=Users,OU=Managed Users,DC=,DC=org,DC=uk'
+new-aduser -name SamAccount -GivenName "fname" -Surname "Lname" -DisplayName "fname lname" -userprinciplaename "SAMACCOUNT" -proxyAddresses "SMTP:@domain" -mail "domain" -company "Company" -path 'OU=Users,OU=Managed Users,DC=,DC=org,DC=uk'
 
 Set-ADAccountPassword -identity SAMACCOUNT -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "!1Password" -Force)
 
@@ -8,6 +8,6 @@ add-adgroupmember -identity "sec-emsE5" "SAMACCOUNT"
 
 add-adgroupmember -identity "sec-o365e5" "SAMACCOUNT"
 
-set-aduser SAMACCOUNT -replace @{title=""; user logon name=""; proxyAddresses="SMTP:@domain"; email="@domain}
+set-aduser SAMACCOUNT -replace @{title="";}
 
 enable-adaccount SAMACCOUNT
