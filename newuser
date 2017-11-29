@@ -1,13 +1,13 @@
-new-aduser -name SamAccount -GivenName "fname" -Surname "Lname" -DisplayName "fname lname" -userprincipalname "SAMACCOUNT" -proxyAddresses "SMTP:@domain" -mail "domain" -company "Company" -path 'OU=Users,OU=Managed Users,DC=,DC=org,DC=uk'
+new-aduser -name "FName LName" -SAMACCOUNNAME "FName.LName"-GivenName "FName" -Surname "LName" -DisplayName "FName LName" -Company "Company" -path 'OU=OU,OU=Managed Users,DC=Domain,DC=org,DC=uk'
 
-Set-ADAccountPassword -identity SAMACCOUNT -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "!1Password" -Force)
+Set-ADAccountPassword -identity  FName.LName -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "!1Password" -Force)
 
-Set-ADUser SAMACCOUNT -ChangePasswordAtLogon $True
+Set-ADUser FName.LName -ChangePasswordAtLogon $True
 
-add-adgroupmember -identity "sec-emsE5" "SAMACCOUNT"
+Get-ADUser -Identity FName.LName -Properties memberof |
+Select-Object -ExpandProperty memberof |
+Add-ADGroupMember -Members FName.LName
 
-add-adgroupmember -identity "sec-o365e5" "SAMACCOUNT"
+set-aduser FName.LName -replace @{title="Title"; description ="Title"; userprincipalname=" FName.LName@Domain"; proxyAddresses="SMTP:FName.LName@Domain"; mail="FName.LName@Domain"}
 
-set-aduser SAMACCOUNT -replace @{title="";}
-
-enable-adaccount SAMACCOUNT
+enable-adaccount FName.LName
