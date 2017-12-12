@@ -1,0 +1,8 @@
+
+$users = import-csv C:\temp\titles.csv 
+
+foreach ($u in $users) {
+
+set-aduser -identity $u.samaccountname -replace @{title= "$u.title"}
+
+}
