@@ -3,7 +3,7 @@
 get-adprinciplegroupmembership samaccount | where {$_.Name -notlike "Domain Users"} |% {Remove-AdPrincipleGroupmembership samaccount -memberof $_ -Confirm:$false}
 
 #Empties the mail, company and proxyaddresses fields
-set-aduser  samaccountname -replace @{mail="$null"; company ="$null"; proxyAddresses="$null"}
+set-aduser  samaccountname -clear company, mail
 
 remove-adgroupmember -identity sec-emsE5 -members SAMACCOUNTNAME -confirm:$false
 
