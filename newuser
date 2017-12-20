@@ -1,4 +1,4 @@
-new-aduser -name "FName LName" -SAMACCOUNTNAME "FName.LName"-GivenName "FName" -Surname "LName" -DisplayName "FName LName" -Company "Company" -path 'OU=OU,OU=Managed Users,DC=Domain,DC=org,DC=uk'
+new-aduser -name "FName SName" -SAMACCOUNTNAME "Samaccountname"-GivenName "FName" -Surname "SName" -DisplayName "FName SName" -Company "Company" -path 'OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC' -title "Title" -Description "Title" -UserPrincipalName "samaccountname@domain" -EmailAddress "samaccount@domain"
 
 Set-ADAccountPassword -identity  FName.LName -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "!1Password" -Force)
 
@@ -14,6 +14,8 @@ add-adgroupmember -identity "sec-emsE5" "SAMACCOUNTNAME"
 
 add-adgroupmember -identity "sec-o365e5" "SAMACCOUNTNAME"
 
-set-aduser FName.LName -replace @{title="Title"; description ="Title"; userprincipalname=" FName.LName@Domain"; proxyAddresses="SMTP:FName.LName@Domain"; mail="FName.LName@Domain"}
+set-aduser FName.LName -replace @{proxyAddresses="SMTP:FName.LName@Domain"}
+
+set-aduser samaccountname -replace @{telephonenumber =""}
 
 enable-adaccount FName.LName
