@@ -2,7 +2,7 @@
 Sharing calenars across different domains - created by Pasha Shah https://www.linkedin.com/in/pasha-shah-5aa71b11/
 #>
 
-$ExchSession = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://cdm-ex01.onealternative.net/PowerShell/ -Authentication Kerberos
+$ExchSession = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://exchange/PowerShell/ -Authentication Kerberos
 Import-PSSession $ExchSession
 
 Add-MailboxFolderPermission “user:\calendar” –User "email@company.com" –AccessRights reviewer
