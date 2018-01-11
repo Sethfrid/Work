@@ -1,0 +1,22 @@
+<#
+Sharing calenars across different domains - created by Pasha Shah https://www.linkedin.com/in/pasha-shah-5aa71b11/
+#>
+
+$ExchSession = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://cdm-ex01.onealternative.net/PowerShell/ -Authentication Kerberos
+Import-PSSession $ExchSession
+
+Add-MailboxFolderPermission “user:\calendar” –User "email@company.com" –AccessRights reviewer
+
+#Change Permissions
+Set-MailboxFolderPermission “user:\calendar” –User "email@company.com" –AccessRights reviewer
+
+#Permission Levels
+#Author   CreateItems, DeleteOwnedItems, EditOwnedItems, FolderVisible, ReadItems
+#Contributor   CreateItems, FolderVisible
+#Editor   CreateItems, DeleteAllItems, DeleteOwnedItems, EditAllItems, EditOwnedItems, FolderVisible, ReadItems
+#None   FolderVisible
+#NonEditingAuthor   CreateItems, FolderVisible, ReadItems
+#Owner   CreateItems, CreateSubfolders, DeleteAllItems, DeleteOwnedItems, EditAllItems, EditOwnedItems, FolderContact, FolderOwner, FolderVisible, ReadItems
+#PublishingEditor   CreateItems, CreateSubfolders, DeleteAllItems, DeleteOwnedItems, EditAllItems, EditOwnedItems, FolderVisible, ReadItems
+#PublishingAuthor   CreateItems, CreateSubfolders, DeleteOwnedItems, EditOwnedItems, FolderVisible, ReadItems
+#Reviewer   FolderVisible, ReadItem
