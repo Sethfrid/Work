@@ -1,4 +1,4 @@
-new-aduser -name "FName SName" -SAMACCOUNTNAME "Samaccountname"-GivenName "FName" -Surname "SName" -DisplayName "FName SName" -Company "Company" -path 'OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC' -title "Title" -Description "Title" -UserPrincipalName "samaccountname@domain" -EmailAddress "samaccount@domain" -Enabled $True -AccountPassword $(ConvertTo-SecureString -AsPlainText "Password1!" -Force)
+new-aduser -name "FName SName" -SAMACCOUNTNAME "Samaccountname" -GivenName "FName" -Surname "SName" -DisplayName "FName SName" -Company "Company" -path 'OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC' -title "Title" -Description "Title" -UserPrincipalName "samaccountname@domain" -EmailAddress "samaccount@domain" -Enabled $True -AccountPassword $(ConvertTo-SecureString -AsPlainText "Password1!" -Force)
 
 
 
