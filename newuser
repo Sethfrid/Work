@@ -2,6 +2,32 @@ new-aduser -name "FName SName" -SAMACCOUNTNAME "Samaccountname" -GivenName "FNam
 
 Set-ADUser samaccountname -ChangePasswordAtLogon $True
 
+
+#########
+
+$params = @{
+
+	name = "Gina Gilca"
+	samaccountname = "gina.gilca"
+	givenname = "Gina"
+	surname = "Gilca"
+	company = "UK Finance"
+	postalcode = "EC2R 7HJ"
+	path = "OU=Angel Court Users,OU=Managed Users,DC=ukfinance,DC=org,DC=uk"
+	title = ""
+	description ""
+	userprincipalname = "gina.gilca@ukfinance.org.uk"
+	emailaddress = "gina.gilca@ukfinance.org.uk"
+	enabled = $true
+	accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
+	telephonenumber = ""
+	otherattributes = @{proxyAddresses ="gina.gilca@ukfinance.org.uk"}
+}
+
+new-user @params
+
+#########
+
 Get-ADUser -Identity FName.LName -Properties memberof |
 Select-Object -ExpandProperty memberof |
 Add-ADGroupMember -Members FName.LName
