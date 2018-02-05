@@ -1,5 +1,3 @@
-new-aduser -name "FName SName" -SAMACCOUNTNAME "Samaccountname" -GivenName "FName" -Surname "SName" -DisplayName "FName SName" -Company "Company" -path 'OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC' -title "Title" -Description "Title" -UserPrincipalName "samaccountname@domain" -EmailAddress "samaccount@domain" -Enabled $True -AccountPassword $(ConvertTo-SecureString -AsPlainText "Password1!" -Force) -otherattributes @{proxyAddresses="SMTP:FName.LName@Domain"; telephonenumber =""}
-
 Set-ADUser samaccountname -ChangePasswordAtLogon $True
 
 
@@ -24,7 +22,7 @@ $params = @{
 	otherattributes = @{proxyAddresses ="email"}
 }
 
-new-user @params
+new-aduser @params
 
 #########
 
