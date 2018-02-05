@@ -13,7 +13,7 @@ $params = @{
 	postalcode = "Post Code"
 	path = "OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC"
 	title = ""
-	description ""
+	description = ""
 	userprincipalname = "email"
 	emailaddress = "email"
 	enabled = $true
