@@ -7,21 +7,21 @@ Set-ADUser samaccountname -ChangePasswordAtLogon $True
 
 $params = @{
 
-	name = "Gina Gilca"
-	samaccountname = "gina.gilca"
-	givenname = "Gina"
-	surname = "Gilca"
-	company = "UK Finance"
-	postalcode = "EC2R 7HJ"
-	path = "OU=Angel Court Users,OU=Managed Users,DC=ukfinance,DC=org,DC=uk"
+	name = "Name"
+	samaccountname = "Fname.Lname"
+	givenname = "Fname"
+	surname = "Fname"
+	company = "Company"
+	postalcode = "Post Code"
+	path = "OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC"
 	title = ""
 	description ""
-	userprincipalname = "gina.gilca@ukfinance.org.uk"
-	emailaddress = "gina.gilca@ukfinance.org.uk"
+	userprincipalname = "email"
+	emailaddress = "email"
 	enabled = $true
 	accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
 	telephonenumber = ""
-	otherattributes = @{proxyAddresses ="gina.gilca@ukfinance.org.uk"}
+	otherattributes = @{proxyAddresses ="email"}
 }
 
 new-user @params
