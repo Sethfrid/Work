@@ -8,7 +8,7 @@ $params = @{
 	name = "Name"
 	samaccountname = "Fname.Lname"
 	givenname = "Fname"
-	surname = "Fname"
+	surname = "Lname"
 	company = "Company"
 	postalcode = "Post Code"
 	path = "OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC"
