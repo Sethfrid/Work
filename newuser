@@ -12,6 +12,7 @@ $params = @{
 	company = "Company"
 	postalcode = "Post Code"
 	path = "OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC"
+	officephone = ""
 	title = ""
 	description = ""
 	userprincipalname = "email"
@@ -19,7 +20,7 @@ $params = @{
 	enabled = $true
 	accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
 	telephonenumber = ""
-	otherattributes = @{proxyAddresses ="email"}
+	otherattributes = @{proxyAddresses ="SMTP:email"}
 }
 
 new-aduser @params
