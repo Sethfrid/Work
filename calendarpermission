@@ -2,9 +2,8 @@
 
 $cred = get-credential
 
-$session = new-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell/ -Credential $cred -Authentication Basic -AllowRedirection
+enter-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell/ -Credential $cred -Authentication Basic -AllowRedirection
 
-import-pssession $session
 
 # This means that the 2nd user will be given editor rights to the first user's calendar.
 add-mailboxfolderpermission firstuser@domain.com:\calendar -user seconduser@domain.com -Accessrights Editor
@@ -29,4 +28,4 @@ Contributor	A Contributor can create only folder items and cannot read items.
 None	The None role has no access to the folder.
 #>
 
-remove-pssession $session
+exit
