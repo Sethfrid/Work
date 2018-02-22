@@ -5,7 +5,7 @@ Set-ADUser samaccountname -ChangePasswordAtLogon $True
 
 $params = @{
 
-	name = "Name"
+	displayname = "Name"
 	samaccountname = "Fname.Lname"
 	givenname = "Fname"
 	surname = "Lname"
