@@ -37,4 +37,34 @@ add-adgroupmember -identity "sec-emsE5" "SAMACCOUNTNAME"
 
 add-adgroupmember -identity "sec-o365e5" "SAMACCOUNTNAME"
 
+<# The below is a work in progress #>
 
+$first = read-host "Enter the First Name"
+$last = read-host "Enter Surname"
+$title = read-host "Enter the title"
+$tel = read-host "Enter Phone number (press enter if not required)"
+$mobile = read-host "Enter mobile (press enter if not required)" 
+$domain = "@domain"
+$sam = $first + "." + $last
+
+$params = @{
+
+            displayname = $first + " " + $last
+            samaccountname = $sam
+	    givenname = $first
+	    surname = $last
+	    company = "Company"
+	    officephone = $tel
+	    mobile = $mobile
+	    postalcode = "Post Code"
+	    path = "OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC"
+	    title = $title
+	    description = $title
+	    userprincipalname = $sam + $domain
+	    EmailAddress = $sam + $domain
+	    enabled = $true
+	    accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
+	    Otherattributes = @{proxyAddresses = "SMTP:$sam + $domain"}
+} 
+
+new-aduser @params
