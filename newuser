@@ -37,7 +37,7 @@ add-adgroupmember -identity "sec-emsE5" "SAMACCOUNTNAME"
 
 add-adgroupmember -identity "sec-o365e5" "SAMACCOUNTNAME"
 
-<# The below is a work in progress #>
+###################
 
 param(
       [Parameter(Mandatory=$True)]
@@ -61,9 +61,9 @@ $samn = $sam.ToLower()
 $domain = "@ukfinance.org.uk"
 
 $params = @{
-
-        displayname = $firstname + " " + $lastname
-        samaccountname = $sam
+	    name = $firstname + " " + $lastname
+            displayname = $firstname + " " + $lastname
+            samaccountname = $sam
 	    givenname = $firstname
 	    surname = $lastname
 	    company = "UK Finance"
