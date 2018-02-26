@@ -39,32 +39,44 @@ add-adgroupmember -identity "sec-o365e5" "SAMACCOUNTNAME"
 
 <# The below is a work in progress #>
 
-$first = read-host "Enter the First Name"
-$last = read-host "Enter Surname"
-$title = read-host "Enter the title"
-$tel = read-host "Enter Phone number (press enter if not required)"
-$mobile = read-host "Enter mobile (press enter if not required)" 
-$domain = "@domain"
-$sam = $first + "." + $last
+param(
+      [Parameter(Mandatory=$True)]
+      [string]$firstname,
+
+      [Parameter(Mandatory=$True)]
+      [string]$lastname,
+
+      [Parameter(Mandatory=$True)]
+      [string]$title,
+
+      [Parameter(Mandatory=$True)]
+      [int]$tel
+
+)
+
+$sam = $firstname + "." + $lastname
+
+$samn = $sam.ToLower()
+
+$domain = "@ukfinance.org.uk"
 
 $params = @{
 
-            displayname = $first + " " + $last
-            samaccountname = $sam
-	    givenname = $first
-	    surname = $last
-	    company = "Company"
+        displayname = $firstname + " " + $lastname
+        samaccountname = $sam
+	    givenname = $firstname
+	    surname = $lastname
+	    company = "UK Finance"
 	    officephone = $tel
-	    mobile = $mobile
-	    postalcode = "Post Code"
-	    path = "OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC"
+	    postalcode = "EC2R 7HJ"
+	    path = "OU=Angel Court Users,OU=Managed Users,DC=ukfinance,DC=org,DC=uk"
 	    title = $title
 	    description = $title
-	    userprincipalname = $sam + $domain
-	    EmailAddress = $sam + $domain
+	    userprincipalname = $samn + $domain
+	    EmailAddress = $samn + $domain
 	    enabled = $true
 	    accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
-	    Otherattributes = @{proxyAddresses = "SMTP:$sam + $domain"}
+	    Otherattributes = @{proxyAddresses = "SMTP:$samn" + "$domain"}
 } 
 
 new-aduser @params
