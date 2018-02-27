@@ -11,85 +11,36 @@
 
 #>
 
-# Enter the full admin email address
 $cred = get-credential
 
 enter-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell/ -Credential $cred -Authentication Basic -AllowRedirection
 
 
-function share-calendar {
-param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the the user's calendar to share for example ben.lam:\calendar")]
-      [string]$user1,
 
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the user to have access to the calendar")]
-      [string]$user2,
+      [string]$user1 = read-host "Enter the the user's calendar to share for example ben.lam:\calendar"
 
-      [Parameter(Mandatory=$True,
-      HelpMessage = 'Enter one of the following: "owner", "publishing editor", "editor", "publishing author", "author", "nonediting author", "reviewer", "contributor", "None"')]
-      [Validateset("owner", "publishing editor", "editor", "publishing author", "author", "nonediting author", "reviewer", "contributor", "None")] 
-      [string]$rights
-
-)
+      [string]$user2 = read-host "Enter the SAMACCOUNTNAME of the user to have access to the calendar"
+      
+      [string]$rights = read-host = 'Enter one of the following: "owner", "publishing editor", "editor", "publishing author", "author", "nonediting author", "reviewer", "contributor", "None" '
 
 
-add-mailboxfolderpermission $user1 -user $user2 -Accessrights 
-
-}
+add-mailboxfolderpermission $user1 -user $user2 -Accessrights $rights
 
 
-function grant-send {
 
-param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the user's mailbox to grant the send on behalf to permission from")]
-      [string]$user1,
 
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the user to receive the permission")]
-      [string]$user2
-)
+
+    [string]$user1 = read-host = "Enter the SAMACCOUNTNAME of the user's mailbox to grant permission from"
+
+    
+    [string]$user2 = read-host "Enter the SAMACCOUNTNAME of the user to receive the permission"
 
 
 set-mailbox $user1 -grantsendonbehalfto $user2
 
-}
-
-
-function add-sendas {
-
-param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the user's mailbox to grant the send as permission from")]
-      [string]$user1,
-
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the user to receive the permission")]
-      [string]$user2
-)
 
 add-recipientpermission $user1 -accessrights SendAs -Trustee $User2
 
-}
 
+add-mailboxpermission $user1 -user $user2 -Accessrights FullAccess
 
-function add-fullaccess {
-
-param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the user's mailbox to grant full access from")]
-      [string]$user1,
-
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the user to receive the permission")]
-      [string]$user2
-)
-
-
-add-mailboxpermission user1 -user user2 -Accessrights FullAccess
-
-}
-
-exit
