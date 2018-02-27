@@ -1,31 +1,95 @@
-# Setting calendar permissions for 365 users
+<#
+.\SYNOPSIS
+    Managing inbox and calendar permissions
 
+.\DESCRIPTION
+    Simple way to grant mailbox access and calendar access with other users.
+
+.\NOTES
+    Author: Ben Lam
+    Last Edit: 27 February 2018.
+
+#>
+
+# Enter the full admin email address
 $cred = get-credential
 
 enter-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell/ -Credential $cred -Authentication Basic -AllowRedirection
 
 
-# This means that the 2nd user will be given editor rights to the first user's calendar.
-add-mailboxfolderpermission firstuser@domain.com:\calendar -user seconduser@domain.com -Accessrights Editor
+function share-calendar {
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the the user's calendar to share for example ben.lam:\calendar")]
+      [string]$user1,
 
-<#
-Owner	The Owner role gives full control of the folder. An Owner can create, modify, delete, and read folder items; create subfolders; and change permissions on the folder.
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the user to have access to the calendar")]
+      [string]$user2,
 
-Publishing Editor	The Publishing Editor role has all rights granted to an Owner, except the right to change permissions. A Publishing Editor can create, modify, delete, and read folder items and create subfolders.
+      [Parameter(Mandatory=$True,
+      HelpMessage = 'Enter one of the following: "owner", "publishing editor", "editor", "publishing author", "author", "nonediting author", "reviewer", "contributor", "None"')]
+      [Validateset("owner", "publishing editor", "editor", "publishing author", "author", "nonediting author", "reviewer", "contributor", "None")] 
+      [string]$rights
 
-Editor	The Editor role has all rights granted to a Publishing Editor, except the right to create subfolders. An Editor can create, modify, delete, and read folder items.
+)
 
-Publishing Author	A Publishing Author can create and read folder items and create subfolders but can modify and delete only folder items that he or she creates, not items created by other users.
 
-Author	An Author has all rights granted to a Publishing Author but cannot create subfolders. An Author can create and read folder items and modify and delete items that he or she creates.
+add-mailboxfolderpermission $user1 -user $user2 -Accessrights 
 
-Nonediting Author	A Nonediting Author can create and read folder items but cannot modify or delete any items, including those that he or she creates.
+}
 
-Reviewer	A Reviewer can read folder items but nothing else.
 
-Contributor	A Contributor can create only folder items and cannot read items.
+function grant-send {
 
-None	The None role has no access to the folder.
-#>
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the user's mailbox to grant the send on behalf to permission from")]
+      [string]$user1,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the user to receive the permission")]
+      [string]$user2
+)
+
+
+set-mailbox $user1 -grantsendonbehalfto $user2
+
+}
+
+
+function add-sendas {
+
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the user's mailbox to grant the send as permission from")]
+      [string]$user1,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the user to receive the permission")]
+      [string]$user2
+)
+
+add-recipientpermission $user1 -accessrights SendAs -Trustee $User2
+
+}
+
+
+function add-fullaccess {
+
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the user's mailbox to grant full access from")]
+      [string]$user1,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the user to receive the permission")]
+      [string]$user2
+)
+
+
+add-mailboxpermission user1 -user user2 -Accessrights FullAccess
+
+}
 
 exit
