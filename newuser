@@ -34,7 +34,7 @@ $sam = $firstname + "." + $lastname
 
 $samn = $sam.ToLower()
 
-$domain = "@ukfinance.org.uk"
+$domain = "@domain" #Set own domain
 
 $params = @{
         displayname = $firstname + " " + $lastname
@@ -42,10 +42,10 @@ $params = @{
         samaccountname = $samn
 	    givenname = $firstname
 	    surname = $lastname
-	    company = "UK Finance"
+	    company = "Company"
 	    officephone = $tel
-	    postalcode = "EC2R 7HJ"
-	    path = "OU=Angel Court Users,OU=Managed Users,DC=ukfinance,DC=org,DC=uk"
+	    postalcode = "Post Code"
+	    path = "OU=,OU=,DC=,DC=,DC="
 	    title = $title
 	    description = $title
 	    userprincipalname = $samn + $domain
