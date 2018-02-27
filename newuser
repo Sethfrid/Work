@@ -1,43 +1,19 @@
-Set-ADUser samaccountname -ChangePasswordAtLogon $True
+<#
+.\SYNOPSIS
+    Creates a new user and copy group members from one profile to another profile
 
+.\DESCRIPTION
+    Creates a new user and copies and only adds the group members that are NOT appearing on the 2nd user's profile. The function add-group is for adding a single group to user(s) at a time.
 
-#########
+.\NOTES
+    Author: Ben Lam
+    Last Edit: 27 February 2018.
 
-$params = @{
+#>
 
-	displayname = "Name"
-	samaccountname = "Fname.Lname"
-	givenname = "Fname"
-	surname = "Lname"
-	company = "Company"
-	postalcode = "Post Code"
-	path = "OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC"
-	officephone = ""
-	title = ""
-	description = ""
-	userprincipalname = "email"
-	emailaddress = "email"
-	enabled = $true
-	accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
-	telephonenumber = ""
-	otherattributes = @{proxyAddresses ="SMTP:email"}
-}
+# Creation of a new user
 
-new-aduser @params
-
-#########
-
-Get-ADUser -Identity FName.LName -Properties memberof |
-Select-Object -ExpandProperty memberof |
-Add-ADGroupMember -Members FName.LName
-
-#If user only requires minimal groups
-
-add-adgroupmember -identity "sec-emsE5" "SAMACCOUNTNAME"
-
-add-adgroupmember -identity "sec-o365e5" "SAMACCOUNTNAME"
-
-###################
+function new-user {
 
 param(
       [Parameter(Mandatory=$True)]
@@ -50,7 +26,7 @@ param(
       [string]$title,
 
       [Parameter(Mandatory=$True)]
-      [int]$tel
+      [string]$tel
 
 )
 
@@ -58,18 +34,18 @@ $sam = $firstname + "." + $lastname
 
 $samn = $sam.ToLower()
 
-$domain = "domain"
+$domain = "@ukfinance.org.uk"
 
 $params = @{
-	    name = $firstname + " " + $lastname
-            displayname = $firstname + " " + $lastname
-            samaccountname = $samn
+        displayname = $firstname + " " + $lastname
+        name = $firstname + " " + $lastname
+        samaccountname = $samn
 	    givenname = $firstname
 	    surname = $lastname
-	    company = "Company"
+	    company = "UK Finance"
 	    officephone = $tel
-	    postalcode = "Post Code"
-	    path = "OU=OU,OU=Managed Users,DC=Domain,DC=DC,DC=DC"
+	    postalcode = "EC2R 7HJ"
+	    path = "OU=Angel Court Users,OU=Managed Users,DC=ukfinance,DC=org,DC=uk"
 	    title = $title
 	    description = $title
 	    userprincipalname = $samn + $domain
@@ -80,3 +56,45 @@ $params = @{
 } 
 
 new-aduser @params
+
+}
+
+
+# Copying group members from one user to another
+
+function member-copy {
+
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the first user to copy from")]
+      [string]$user1,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the second user to copy to")]
+      [string]$user2
+)
+
+Get-ADUser -Identity $user1 -Properties memberof |
+Select-Object -ExpandProperty memberof |
+Add-ADGroupMember -Members $user2
+
+}
+
+# For single use adding group members to users
+function add-group {
+
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the group name to add members to the users .Use "" if the name has spaces. Common groups: sec-emsE5, sec-o365, sec_proxy-sync, sec-proxy-user, 'Scaled Desktop Dynamic'")]
+      [string]$group,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME of the user to add to the group using a comma , to separate the names")]
+      [string[]]$user
+
+
+)
+
+add-adgroupmember $group $user
+
+}
