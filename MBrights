@@ -8,4 +8,7 @@ set-mailbox user1 -grantsendonbehalfto user2
 #User 2 will have send as permission for user1
 add-recipientpermission user1 -accessrights SendAs -Trustee User2
 
+#User 2 will have full access to user 1's inbox
+add-mailboxpermission $user1 -user $user2 -Accessrights FullAccess
+
 Exit
