@@ -1,0 +1,5 @@
+#Need AD module
+
+$users = get-aduser -filter * | where enabled -eq $true
+
+add-adgroupmember -identity groupname -members $users.samaccountname
