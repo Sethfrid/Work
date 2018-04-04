@@ -7,7 +7,7 @@
 
 .\NOTES
     Author: Ben Lam
-    Last Edit: 27 February 2018.
+    Last Edit: 4 April 2018.
 
 #>
 
@@ -23,7 +23,7 @@ param(
       [string]$lastname,
 
       [Parameter(Mandatory=$True)]
-      [string]$title,
+      [string]$jobtitle,
 
       [Parameter(Mandatory=$True)]
       [string]$tel
@@ -44,15 +44,14 @@ $params = @{
 	    surname = $lastname
 	    company = "Company"
 	    officephone = $tel
-	    postalcode = "Post Code"
 	    path = "OU=,OU=,DC=,DC=,DC="
-	    title = $title
-	    description = $title
+	    title = $jobtitle
+	    description = $jobtitle
 	    userprincipalname = $samn + $domain
 	    EmailAddress = $samn + $domain
 	    enabled = $true
 	    accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
-	    Otherattributes = @{proxyAddresses = "SMTP:$samn" + "$domain"}
+	    Otherattributes = @{proxyAddresses = ("SMTP:$samn" + "$domain"), ("SIP:$samn" + "$domain")}
 } 
 
 new-aduser @params
