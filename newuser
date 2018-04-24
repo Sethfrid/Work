@@ -7,7 +7,7 @@
 
 .\NOTES
     Author: Ben Lam
-    Last Edit: 4 April 2018.
+    Last Edit: 24 April 2018.
 
 #>
 
@@ -15,48 +15,49 @@
 
 function new-user {
 
-param(
-      [Parameter(Mandatory=$True)]
-      [string]$firstname,
+    param(
+          [Parameter(Mandatory=$True)]
+          [string]$firstname,
 
-      [Parameter(Mandatory=$True)]
-      [string]$lastname,
+          [Parameter(Mandatory=$True)]
+          [string]$lastname,
 
-      [Parameter(Mandatory=$True)]
-      [string]$jobtitle,
+          [Parameter(Mandatory=$True)]
+          [string]$jobtitle,
 
-      [Parameter(Mandatory=$True)]
-      [string]$tel
+          [Parameter(Mandatory=$True)]
+          [string]$tel
 
-)
+    )
 
-$sam = $firstname + "." + $lastname
+    $sam = $firstname + "." + $lastname
 
-$samn = $sam.ToLower()
+    $samn = $sam.ToLower()
 
-$domain = "@domain" #Set own domain
+    $domain = "@domain"
 
-$params = @{
-        displayname = $firstname + " " + $lastname
-        name = $firstname + " " + $lastname
-        samaccountname = $samn
-	    givenname = $firstname
-	    surname = $lastname
-	    company = "Company"
-	    officephone = $tel
-	    path = "OU=,OU=,DC=,DC=,DC="
-	    title = $jobtitle
-	    description = $jobtitle
-	    userprincipalname = $samn + $domain
-	    EmailAddress = $samn + $domain
-	    enabled = $true
-	    accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
-	    Otherattributes = @{proxyAddresses = ("SMTP:$samn" + "$domain"), ("SIP:$samn" + "$domain")}
-} 
+    $params = @{
+            displayname = $firstname + " " + $lastname
+            name = $firstname + " " + $lastname
+            samaccountname = $samn
+                    givenname = $firstname
+                    surname = $lastname
+                    company = "UK Finance"
+                    officephone = $tel
+                    path = "OU=Users,OU=Managed Users,DC=domain,DC=org,DC=uk"
+                    title = $jobtitle
+                    description = $jobtitle
+                    userprincipalname = $samn + $domain
+                    EmailAddress = $samn + $domain
+                    enabled = $true
+                    accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
+                    Otherattributes = @{proxyAddresses = ("SMTP:$samn" + "$domain"), ("SIP:$samn" + "$domain")}
+    } 
+
+}
 
 new-aduser @params
 
-}
 
 
 # Copying group members from one user to another
@@ -97,3 +98,38 @@ param(
 add-adgroupmember $group $user
 
 }
+
+
+# creating admin account
+function new-adminuser {
+
+    param(
+          [Parameter(Mandatory=$True)]
+          [string]$firstname,
+
+          [Parameter(Mandatory=$True)]
+          [string]$lastname
+
+    )
+
+    $sam = "admin"
+
+    $domain = "@domain"
+
+    $params = @{
+
+            displayname = $firstname + " " + $lastname
+            name = $firstname + " " + $lastname
+                samaccountname = $sam + $firstname.ToLower()[0] + $lastname.ToLower()[0]
+                givenname = $firstname
+                surname = $lastname
+                path = "OU=Users,OU=Managed Users,DC=domain,DC=org,DC=uk"
+                userprincipalname = $sam + $firstname.ToLower()[0] + $lastname.ToLower()[0] + $domain
+                enabled = $true
+                accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
+    }
+
+}
+
+new-aduser @params
+
