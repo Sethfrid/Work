@@ -53,10 +53,10 @@ function new-user {
                     accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
                     Otherattributes = @{proxyAddresses = ("SMTP:$samn" + "$domain"), ("SIP:$samn" + "$domain")}
     } 
-
+new-aduser @params
 }
 
-new-aduser @params
+
 
 
 
@@ -128,8 +128,8 @@ function new-adminuser {
                 enabled = $true
                 accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
     }
-
+new-aduser @params
 }
 
-new-aduser @params
+
 
