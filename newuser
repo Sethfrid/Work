@@ -7,7 +7,7 @@
 
 .\NOTES
     Author: Ben Lam
-    Last Edit: 24 April 2018.
+    Last Edit: 3 May 2018.
 
 #>
 
@@ -80,24 +80,7 @@ Add-ADGroupMember -Members $user2
 
 }
 
-# For single use adding group members to users
-function add-group {
 
-param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the group name to add members to the users .Use "" if the name has spaces. Common groups: sec-emsE5, sec-o365, sec_proxy-sync, sec-proxy-user, 'Scaled Desktop Dynamic'")]
-      [string]$group,
-
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the user to add to the group using a comma , to separate the names")]
-      [string[]]$user
-
-
-)
-
-add-adgroupmember $group $user
-
-}
 
 
 # creating admin account
