@@ -1,0 +1,8 @@
+$computers = computers
+
+foreach ($computer in $computers) {
+
+            Get-EventLog -log application -computername $computer | Export-Csv location "-"$(Get-Date -Format yyyy-MM-dd).csv
+           Get-EventLog -log system -computername $computer | Export-Csv location "-"$(Get-Date -Format yyyy-MM-dd).csv
+
+}
