@@ -1,15 +1,23 @@
-#removes all groups for a user
+function disable-user {
+[cmdletbinding()]
+param(
+     [Parameter(Mandatory=$True)]
+          [string]$user
+)
 
-get-ADPrincipalGroupMembership samaccountname | where {$_.Name -notlike "Domain Users"} |% {Remove-ADPrincipalGroupMembership samaccountname -memberof $_ -Confirm:$false}
+set-aduser $user -clear company, mail, telephonenumber, ProxyAddresses, mobile
+disable-adaccount $user
 
-#Empties the mail, company and proxyaddresses fields
-set-aduser  samaccountname -clear company, mail, proxyAddresses
+}
 
-remove-adgroupmember -identity sec-emsE5 -members SAMACCOUNTNAME -confirm:$false
 
-remove-adgroupmember -identity sec-o365e5 -members SAMACCOUNTNAME -confirm:$false
+function remove-groups {
+[cmdletbinding()]
+param (
+[Parameter(Mandatory=$True)]
+          [string]$user
 
-disable-adaccount samaccountname
+)
+get-ADPrincipalGroupMembership $user | where {$_.Name -notlike "Domain Users"} |% {Remove-ADPrincipalGroupMembership $user -memberof $_ -Confirm:$false}
 
-set-adaccountexpiration samaccount -DateTime "07/08/2017" 
-# In this date's example the account is set to expire the EOD of the previous day.
+}
