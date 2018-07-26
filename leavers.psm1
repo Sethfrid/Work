@@ -20,6 +20,11 @@ param (
           [string]$user
  
 )
+
+get-ADPrincipalGroupMembership $user | select name | export-csv c:\temp\$user.csv
+
+start-sleep -s 5
+
 get-ADPrincipalGroupMembership $user | where {$_.Name -notlike "Domain Users"} |% {Remove-ADPrincipalGroupMembership $user -memberof $_ -Confirm:$false}
  
 }
