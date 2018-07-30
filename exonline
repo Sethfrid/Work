@@ -1,0 +1,35 @@
+
+# in this line below it will prompt you to enter your credentials. This does not require MFA
+
+enter-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.outlook.com/powershell/ -Credential $cred -Authentication Basic -AllowRedirection
+
+# This one will require MFA
+
+connect-exopssession -userprincipalname admin@emailaddress.com
+
+
+
+add-mailboxfolderpermission username:\calendar -user username/email -Accessrights editor -AutoMapping $true
+
+# Choose one of the following rights "owner", "publishingeditor", "editor", "publishingauthor", "author", "noneditingauthor", "reviewer", "contributor", "None" 
+
+
+# Send on behalf of user
+
+add-mailbox username -grantsendonbehalfto username
+set-mailbox username -grantsendonbehalfto username
+
+
+# Setup send as 
+
+add-recipientpermission username -accessrights SendAs -Trustee username
+
+#Access to a user's MB
+
+add-mailboxpermission username -user username -Accessrights FullAccess
+
+# Hide from GAL
+
+set-mailbox -identity username -HiddenFromAddressListsEnabled $true
+
+
