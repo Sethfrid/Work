@@ -1,0 +1,63 @@
+function add-calendar {
+
+[cmdletbinding()]
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's calendar ")]
+      [string]$username1,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the calendar")]
+      [string]$username2,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = 'Choose one of the following rights "owner", "publishingeditor", "editor", "publishingauthor", "author", "noneditingauthor", "reviewer", "contributor", "None" ')]
+      [string]$access
+)
+
+$calendar = $username1 + ":" + "\calendar"
+
+add-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
+
+}
+
+
+function set-calendar {
+
+[cmdletbinding()]
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's calendar ")]
+      [string]$username1,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to modify access to the calendar")]
+      [string]$username2,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = 'Choose one of the following rights "owner", "publishingeditor", "editor", "publishingauthor", "author", "noneditingauthor", "reviewer", "contributor", "None" ')]
+      [string]$access
+)
+
+$calendar = $username1 + ":" + "\calendar"
+
+set-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
+
+}
+
+
+function check-calendar {
+
+[cmdletbinding()]
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's calendar ")]
+      [string]$username
+
+)
+
+$calendar = $username + ":" + "\calendar"
+
+get-mailboxfolderpermission $calendar
+
+}
