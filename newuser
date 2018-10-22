@@ -1,20 +1,5 @@
-<#
-.\SYNOPSIS
-    Creates a new user and copy group members from one profile to another profile
-
-.\DESCRIPTION
-    Creates a new user and copies and only adds the group members that are NOT appearing on the 2nd user's profile. The function add-group is for adding a single group to user(s) at a time.
-
-.\NOTES
-    Author: Ben Lam
-    Last Edit: 3 May 2018.
-
-#>
-
-# Creation of a new user
-
-function new-user {
-
+function create-user {
+   [cmdletbinding()]
     param(
           [Parameter(Mandatory=$True)]
           [string]$firstname,
@@ -44,7 +29,7 @@ function new-user {
                     surname = $lastname
                     company = "UK Finance"
                     officephone = $tel
-                    path = "OU=Users,OU=Managed Users,DC=domain,DC=org,DC=uk"
+                    path = "OU=OU,OU=Managed Users,DC=domain,DC=org,DC=uk"
                     title = $jobtitle
                     description = $jobtitle
                     userprincipalname = $samn + $domain
@@ -52,39 +37,89 @@ function new-user {
                     enabled = $true
                     accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
                     Otherattributes = @{proxyAddresses = ("SMTP:$samn" + "$domain"), ("SIP:$samn" + "$domain")}
-    } 
+    }
 new-aduser @params
 }
 
-
-
-
-
-# Copying group members from one user to another
-
-function member-copy {
-
+function group-copy {
+[cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
       HelpMessage = "Enter the SAMACCOUNTNAME of the first user to copy from")]
-      [string]$user1,
+      [string]$username1,
 
       [Parameter(Mandatory=$True,
       HelpMessage = "Enter the SAMACCOUNTNAME of the second user to copy to")]
-      [string]$user2
+      [string]$username2
 )
 
-Get-ADUser -Identity $user1 -Properties memberof |
+Get-ADUser -Identity $username1 -Properties memberof |
 Select-Object -ExpandProperty memberof |
-Add-ADGroupMember -Members $user2
+Add-ADGroupMember -Members $username2
+
+}
+
+
+function set-member {
+[cmdletbinding()]
+param (
+          [Parameter(Mandatory=$True)]
+          [string]$username
+       )
+
+$build = read-host -Prompt "Choose 1 for x86, 2 for x64, 3 for Adobe Standard, 4 for FFB or 5 for Adobe CC."
+
+switch ($build) {
+
+1 {add-adgroupmember -identity "Production Main Pool" -members $username}
+
+2 {add-adgroupmember -identity "Production Office x64 Desktop" -members $username}
+
+3 {add-adgroupmember -identity "Production Main Pool" -members $username}
+
+4 {add-adgroupmember -identity "Production FFB Desktop" -members $username}
+
+5 {add-adgroupmember -identity "Production AdobeCC Desktop" -members $username}
+
+}
+
+
+add-adgroupmember -identity "sec-emsE5" "$username"
+
+add-adgroupmember -identity "sec-o365e5" "$username"
+
+add-adgroupmember -identity "sec-proxy-user" "$username"
+
+add-adgroupmember -identity "sec_proxy-sync" "$username"
+
+add-adgroupmember -identity "sec-domestic-plan" "$username"
+
+
+}
+
+
+function enable-mfa {
+
+
+Connect-MsolService
+
+$userprincipalname = read-host "Enter user's principal name"
+
+
+$auth = New-Object -TypeName microsoft.online.administration.strongauthenticationrequirement
+
+$auth.RelyingParty = "*"
+
+$auth.state = "Enforced"
+
+Set-MsolUser -userprincipalname $userprincipalname -StrongAuthenticationrequirements $auth
+
 
 }
 
 
 
-
-# creating admin account
-function new-adminuser {
+function create-adminuser {
 
     param(
           [Parameter(Mandatory=$True)]
@@ -106,13 +141,11 @@ function new-adminuser {
                 samaccountname = $sam + $firstname.ToLower()[0] + $lastname.ToLower()[0]
                 givenname = $firstname
                 surname = $lastname
-                path = "OU=Users,OU=Managed Users,DC=domain,DC=org,DC=uk"
+                path = "OU=Admin Accounts,OU=Managed Users,DC=domain,DC=org,DC=uk"
                 userprincipalname = $sam + $firstname.ToLower()[0] + $lastname.ToLower()[0] + $domain
                 enabled = $true
                 accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
     }
 new-aduser @params
+
 }
-
-
-
