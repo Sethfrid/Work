@@ -1,0 +1,73 @@
+function add-mailbox {
+
+[cmdletbinding()]
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's mailbox")]
+      [string]$username1,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the mailbox")]
+      [string]$username2,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = 'Choose one of the following rights "FullAcess" "None" ')]
+      [string]$access
+)
+
+
+add-mailboxpermission $username1 -user $username2 -Accessrights $access
+
+}
+
+
+function check-mailbox {
+
+[cmdletbinding()]
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to see their mailbox ")]
+      [string]$username
+
+)
+
+get-mailboxpermission $username
+
+}
+
+function add-sendbehalf {
+
+[cmdletbinding()]
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's mailbox")]
+      [string]$username1,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the mailbox")]
+      [string]$username2
+)
+
+
+add-mailboxpermission $username -grantsendonbehalfto $username1
+
+}
+
+
+function add-sendas {
+
+[cmdletbinding()]
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's mailbox")]
+      [string]$username1,
+
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the mailbox")]
+      [string]$username2
+)
+
+
+add-mailboxpermission $username -accessrights SendAs -Trustee $username1
+
+}
