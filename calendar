@@ -1,5 +1,7 @@
-function add-calendar {
+#Requies the module connect-exchangeonlineshell which allows for MFA. 
 
+function add-calendar {
+#This adds and allows a level of access to the host user's calendar.
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
@@ -23,7 +25,7 @@ add-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
 
 
 function set-calendar {
-
+#This is if a user already has access to the host user's calendar but need to amend the permission level
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
@@ -47,7 +49,7 @@ set-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
 
 
 function check-calendar {
-
+#Check the host user's calendar before adding or setting permission level.
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
