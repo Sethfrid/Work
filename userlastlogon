@@ -1,2 +1,4 @@
+#Note that this is for the last date/time that the user was authenticated to a particular DC
+
 $name = get-aduser samaccount | get-adobject -properties lastlogon
 [datetime]::fromfiletime($name.lastlogon)
