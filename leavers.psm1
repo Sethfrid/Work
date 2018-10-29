@@ -1,3 +1,6 @@
+#This is a script that is run for when a user leaves the business for my current client I support.
+
+#Enter the username of the leaver and it wil be disabled and moved to the disabled OU and set to null the relevant attributes.
 function disable-user {
 [cmdletbinding()]
 param(
@@ -12,7 +15,7 @@ move-adobject -identity $person.DistinguishedName -targetpath "OU=Disabled Users
 
 }
 
-
+# This copies the leaver's group members and export it to a text file so it makes it easier if the leaver's replacement can have the same groups
 function remove-group {
 [cmdletbinding()]
 param (
