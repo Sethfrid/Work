@@ -1,4 +1,4 @@
-#Need AD module
+#Requires AD module. Gets all active users and add them to a group
 
 $users = get-aduser -filter * | where enabled -eq $true
 
