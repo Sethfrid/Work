@@ -1,1 +1,3 @@
+#This is for setting the job title for a bunch of users
+
 import-csv C:\temp\titles.csv | % {set-aduser -identity $_.samaccountname -title $_.title}
