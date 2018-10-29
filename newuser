@@ -1,3 +1,6 @@
+#This requires AD module.
+
+#Make sure to edit the line 35 to have the correct OU
 function create-user {
    [cmdletbinding()]
     param(
@@ -27,7 +30,7 @@ function create-user {
             samaccountname = $samn
                     givenname = $firstname
                     surname = $lastname
-                    company = "UK Finance"
+                    company = "Company"
                     officephone = $tel
                     path = "OU=OU,OU=Managed Users,DC=domain,DC=org,DC=uk"
                     title = $jobtitle
@@ -40,6 +43,8 @@ function create-user {
     }
 new-aduser @params
 }
+
+#This copies the group members of 1 user to another user.
 
 function group-copy {
 [cmdletbinding()]
@@ -59,6 +64,7 @@ Add-ADGroupMember -Members $username2
 
 }
 
+#This sets the generic groups for a new user.
 
 function set-member {
 [cmdletbinding()]
@@ -118,7 +124,7 @@ Set-MsolUser -userprincipalname $userprincipalname -StrongAuthenticationrequirem
 }
 
 
-
+#Create an admin user
 function create-adminuser {
 
     param(
