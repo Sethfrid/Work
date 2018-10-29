@@ -1,2 +1,4 @@
+#This takes a file and appends a line with the text specified and saves as a new file in the default folder you are in
+
 $a = "c:\test.txt"
 $b|foreach {$_ + "text"} | Out-File test2.txt
