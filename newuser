@@ -1,6 +1,6 @@
 #This requires AD module.
 
-#Make sure to edit the line 35 to have the correct OU
+#Make sure to edit the line 35 to have the correct OU and line 33 to have the company name
 function create-user {
    [cmdletbinding()]
     param(
