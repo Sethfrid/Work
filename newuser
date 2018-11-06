@@ -38,7 +38,7 @@ function create-user {
                     userprincipalname = $samn + $domain
                     EmailAddress = $samn + $domain
                     enabled = $true
-                    accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
+                    accountpassword = read-host "Enter Password" -AsSecureString
                     Otherattributes = @{proxyAddresses = ("SMTP:$samn" + "$domain"), ("SIP:$samn" + "$domain")}
     }
 new-aduser @params
@@ -150,7 +150,7 @@ function create-adminuser {
                 path = "OU=Admin Accounts,OU=Managed Users,DC=domain,DC=org,DC=uk"
                 userprincipalname = $sam + $firstname.ToLower()[0] + $lastname.ToLower()[0] + $domain
                 enabled = $true
-                accountpassword = (ConvertTo-SecureString -AsPlainText "Password1!" -Force)
+                accountpassword = read-host "Enter Password" -AsSecureString
     }
 new-aduser @params
 
