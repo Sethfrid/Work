@@ -81,3 +81,20 @@ param(
 add-mailboxpermission $username -accessrights SendAs -Trustee $username1
 
 }
+
+
+# Check mailbox rules for a particular user.
+
+function check-mailrules{
+
+[cmdletbinding()]
+param(
+      [Parameter(Mandatory=$True,
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to list the rules they have set up")]
+      [string]$username
+
+)
+
+get-inboxrule -mailbox $username | select name, description | fl
+
+}
