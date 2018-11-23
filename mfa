@@ -1,0 +1,28 @@
+#run connect-msolservice first 
+
+function enable-mfa {
+
+$userprincipalname = read-host "Enter user's principal name"
+
+
+$auth = New-Object -TypeName microsoft.online.administration.strongauthenticationrequirement
+
+$auth.RelyingParty = "*"
+
+$auth.state = "Enforced"
+
+Set-MsolUser -userprincipalname $userprincipalname -StrongAuthenticationrequirements $auth
+
+
+}
+
+
+function disable-mfa {
+
+$userprincipalname = read-host "Enter user's principal name"
+
+$auth = @()
+
+Set-MsolUser -userprincipalname $userprincipalname -StrongAuthenticationrequirements $auth
+
+}
