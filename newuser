@@ -1,6 +1,6 @@
 #This requires AD module.
 
-#Make sure to edit the line 35 to have the correct OU and line 33 to have the company name
+
 function create-user {
    [cmdletbinding()]
     param(
@@ -18,33 +18,28 @@ function create-user {
 
     )
 
-    $sam = $firstname + "." + $lastname
+    $sam = $firstname.ToLower() + "." + $lastname.ToLower()
 
-    $samn = $sam.ToLower()
-
-    $domain = "@domain"
-
-    $params = @{
+    $newuser = @{
             displayname = $firstname + " " + $lastname
             name = $firstname + " " + $lastname
-            samaccountname = $samn
-                    givenname = $firstname
-                    surname = $lastname
-                    company = "Company"
-                    officephone = $tel
-                    path = "OU=OU,OU=Managed Users,DC=domain,DC=org,DC=uk"
-                    title = $jobtitle
-                    description = $jobtitle
-                    userprincipalname = $samn + $domain
-                    EmailAddress = $samn + $domain
-                    enabled = $true
-                    accountpassword = read-host "Enter Password" -AsSecureString
-                    Otherattributes = @{proxyAddresses = ("SMTP:$samn" + "$domain"), ("SIP:$samn" + "$domain")}
+            samaccountname = $firstname.ToLower() + "." + $lastname.ToLower()
+               givenname = $firstname
+               surname = $lastname
+               company = "UK Finance"
+               officephone = $tel
+               path = "OU=Angel Court Users,OU=Managed Users,DC=domain,DC=,DC="
+               title = $jobtitle
+               description = $jobtitle
+               userprincipalname = "$firstname.$lastname@domain".ToLower()
+               EmailAddress = "$firstname.$lastname@domain".ToLower()
+               enabled = $true
+               accountpassword = read-host "Enter Password" -AsSecureString
+               Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@domain"), ("SIP:$sam" + "@domain")}
     }
-new-aduser @params
+new-aduser @newuser
 }
 
-#This copies the group members of 1 user to another user.
 
 function group-copy {
 [cmdletbinding()]
@@ -64,7 +59,6 @@ Add-ADGroupMember -Members $username2
 
 }
 
-#This sets the generic groups for a new user.
 
 function set-member {
 [cmdletbinding()]
@@ -104,27 +98,6 @@ add-adgroupmember -identity "sec-domestic-plan" "$username"
 }
 
 
-function enable-mfa {
-
-
-Connect-MsolService
-
-$userprincipalname = read-host "Enter user's principal name"
-
-
-$auth = New-Object -TypeName microsoft.online.administration.strongauthenticationrequirement
-
-$auth.RelyingParty = "*"
-
-$auth.state = "Enforced"
-
-Set-MsolUser -userprincipalname $userprincipalname -StrongAuthenticationrequirements $auth
-
-
-}
-
-
-#Create an admin user
 function create-adminuser {
 
     param(
@@ -136,22 +109,19 @@ function create-adminuser {
 
     )
 
-    $sam = "admin"
-
-    $domain = "@domain"
-
     $params = @{
 
-            displayname = $firstname + " " + $lastname
-            name = $firstname + " " + $lastname
-                samaccountname = $sam + $firstname.ToLower()[0] + $lastname.ToLower()[0]
-                givenname = $firstname
-                surname = $lastname
-                path = "OU=Admin Accounts,OU=Managed Users,DC=domain,DC=org,DC=uk"
-                userprincipalname = $sam + $firstname.ToLower()[0] + $lastname.ToLower()[0] + $domain
-                enabled = $true
-                accountpassword = read-host "Enter Password" -AsSecureString
+        displayname = $firstname + " " + $lastname
+        name = $firstname + " " + $lastname
+           samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0]
+           givenname = $firstname
+           surname = $lastname
+           path = "OU=Admin Accounts,OU=Managed Users,DC=domain,DC=,DC="
+           userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@domain"
+           enabled = $true
+           accountpassword = read-host "Enter Password" -AsSecureString
     }
 new-aduser @params
 
 }
+
