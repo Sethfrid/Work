@@ -1,0 +1,39 @@
+#Creation of extension dialling on Skype Online. With thanks to Kevin at this article #https://blogs.technet.microsoft.com/cloudready/2017/08/01/skype-for-business-online-extension-dialing/
+
+Import-Module SkypeOnlineConnector
+$sfbSession = New-CsOnlineSession
+Import-PSSession $sfbSession
+
+# For connecting to the Skype Online Server, will need to authenticate your admin account
+
+#####################################
+
+New-CsTenantDialPlan -Identity name -Description "Description"
+
+# Creation of the dial plan. Change the "description" and name
+
+#####################################
+
+$NR1=New-CsVoiceNormalizationRule -identity Global/name -description "description" -pattern '^(\d{4})$' -Translation '+00000000$1' -InMemory -IsInternalExtension $True
+
+# Creating a rule to be applied to the plan. Look at the prefix +00000000 then the last 4 digits allowed are for speed dialling.
+#The name after Global/ should match the name when it was created.
+
+#####################################
+
+Set-CsTenantDialPlan -identity name -normalizationrules @{Add=$NR1}
+
+# Apply Rule to the plan. Change the name to what it was created
+
+#####################################
+
+Grant-CsTenantDialPlan -identity user@domain -policyname name
+
+# Apply plan to the user. CHange the identity and the policy name. Policy name should match the identity created in the plan
+
+#####################################
+
+get-csonlineuser -identity user@domain| fl *dial* 
+
+# Check if the plan has applied. It will take a few minutes.
+# Only users on the same plan can use extension dialling.
