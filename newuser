@@ -13,8 +13,13 @@ function create-user {
           [Parameter(Mandatory=$True)]
           [string]$jobtitle,
 
-          [Parameter(Mandatory=$True)]
-          [string]$tel
+          [Parameter(Mandatory=$True,
+          HelpMessage = "Press Enter if no number to enter")]
+          [string]$tel,
+          
+          [Parameter(Mandatory=$True,
+          HelpMessage = "Press Enter if no number to enter")]
+          [string]$mobile
 
     )
 
@@ -28,6 +33,7 @@ function create-user {
                surname = $lastname
                company = "UK Finance"
                officephone = $tel
+               mobile = $mobile
                path = "OU=Angel Court Users,OU=Managed Users,DC=domain,DC=,DC="
                title = $jobtitle
                description = $jobtitle
