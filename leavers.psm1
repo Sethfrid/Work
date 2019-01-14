@@ -8,7 +8,8 @@ param(
           [string]$username
 )
 
-set-aduser $username -clear company, mail, telephonenumber, ProxyAddresses, mobile
+$date = get-date -Format "dd-MM-yyyy - hh:mm"
+set-aduser $username -clear company, mail, telephonenumber, ProxyAddresses, mobile -replace @{info= "Account disabled on $date by $env:USERNAME"}
 disable-adaccount $username
 $person = get-aduser $username 
 move-adobject -identity $person.DistinguishedName -targetpath "OU=Disabled Users,OU=Managed Users,DC=domain,DC=org,DC=uk"
