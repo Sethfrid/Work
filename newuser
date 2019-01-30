@@ -28,7 +28,7 @@ function create-user {
     $newuser = @{
             displayname = $firstname + " " + $lastname
             name = $firstname + " " + $lastname
-            samaccountname = $firstname.ToLower() + "." + $lastname.ToLower()
+            samaccountname = $sam
                givenname = $firstname
                surname = $lastname
                company = "UK Finance"
@@ -37,8 +37,8 @@ function create-user {
                path = "OU=Angel Court Users,OU=Managed Users,DC=domain,DC=,DC="
                title = $jobtitle
                description = $jobtitle
-               userprincipalname = "$firstname.$lastname@domain".ToLower()
-               EmailAddress = "$firstname.$lastname@domain".ToLower()
+               userprincipalname = "$sam@domain"
+               EmailAddress = "$sam@domain"
                enabled = $true
                accountpassword = read-host "Enter Password" -AsSecureString
                Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@domain"), ("SIP:$sam" + "@domain")}
