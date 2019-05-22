@@ -98,3 +98,11 @@ param(
 get-inboxrule -mailbox $username | select name, description | fl
 
 }
+
+# get all sharedmailboxes and members
+
+function check-sharedmailbox {
+
+Get-Mailbox -Filter {recipienttypedetails -eq "SharedMailbox"} | Get-Mailboxpermission | where {$_.isinherited -eq $false}  | export-csv C:\temp\fullsharedmailbox.csv
+
+}
