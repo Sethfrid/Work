@@ -1,0 +1,36 @@
+#Checks against each DC in the list for last logon for a user.
+
+function get-lastlogon 
+
+{
+
+[CmdletBinding()]
+param
+
+( 
+[Parameter(Mandatory=$true)]
+$username
+)
+
+
+$DCS = list of DCs
+
+
+foreach ($dc in $DCS) {
+
+$user = Get-ADUser $username -Server $dc -Properties lastlogon
+
+$result =@{
+
+'User' = $user.Name
+'Server' = $dc
+'LastLogon' = [datetime]::FromFileTime($user.'lastLogon')
+
+}
+
+$result
+
+}
+
+
+}
