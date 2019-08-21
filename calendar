@@ -1,11 +1,9 @@
-#Requies the module connect-exchangeonlineshell which allows for MFA. 
+function Add-Calendar {
 
-function add-calendar {
-#This adds and allows a level of access to the host user's calendar.
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's calendar ")]
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the source user's calendar ")]
       [string]$username1,
 
       [Parameter(Mandatory=$True,
@@ -13,47 +11,58 @@ param(
       [string]$username2,
 
       [Parameter(Mandatory=$True,
-      HelpMessage = 'Choose one of the following rights "owner", "publishingeditor", "editor", "publishingauthor", "author", "noneditingauthor", "reviewer", "contributor", "None" ')]
-      [string]$access
+      HelpMessage = 'Visit this site for full list: https://docs.microsoft.com/en-us/powershell/module/exchange/mailboxes/add-mailboxfolderpermission?view=exchange-ps ')]
+      [string]$access,
+
+[Parameter(Mandatory=$True,
+          HelpMessage = "Choose delegate or canviewprivateitems or delegate, canviewprivateitems (press enter if none required)")]
+             [AllowEmptyString()]
+          [string]$flag
+
 )
 
 $calendar = $username1 + ":" + "\calendar"
 
-add-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
+add-mailboxfolderpermission $calendar -user $username2 -Accessrights $access -sharingpermissionflags -$flag
 
 }
 
 
-function set-calendar {
-#This is if a user already has access to the host user's calendar but need to amend the permission level
+function Set-Calendar {
+
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's calendar ")]
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the source user's calendar ")]
       [string]$username1,
 
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to modify access to the calendar")]
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the calendar")]
       [string]$username2,
 
       [Parameter(Mandatory=$True,
-      HelpMessage = 'Choose one of the following rights "owner", "publishingeditor", "editor", "publishingauthor", "author", "noneditingauthor", "reviewer", "contributor", "None" ')]
-      [string]$access
+      HelpMessage = 'Visit this site for full list: https://docs.microsoft.com/en-us/powershell/module/exchange/mailboxes/add-mailboxfolderpermission?view=exchange-ps ')]
+      [string]$access,
+
+[Parameter(Mandatory=$True,
+          HelpMessage = "Choose delegate or canviewprivateitems or delegate, canviewprivateitems" )]
+             [AllowEmptyString()]
+          [string]$flag
 )
 
 $calendar = $username1 + ":" + "\calendar"
 
-set-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
+set-mailboxfolderpermission $calendar -user $username2 -Accessrights $access -sharingpermissionflags -$flag
 
 }
 
 
-function check-calendar {
-#Check the host user's calendar before adding or setting permission level.
+function Check-Calendar {
+
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's calendar ")]
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the source uuser's calendar ")]
       [string]$username
 
 )
@@ -62,4 +71,4 @@ $calendar = $username + ":" + "\calendar"
 
 get-mailboxfolderpermission $calendar
 
-}
+} 
