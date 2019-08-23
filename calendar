@@ -15,15 +15,15 @@ param(
       [string]$access,
 
 [Parameter(Mandatory=$True,
-          HelpMessage = "Choose delegate or canviewprivateitems or delegate, canviewprivateitems (press enter if none required)")]
-             [AllowEmptyString()]
+          HelpMessage = "Choose delegate or canviewprivateitems, "delegate, canviewprivateitems" or none"]
+                  [AllowEmptyString()]
           [string]$flag
 
 )
 
 $calendar = $username1 + ":" + "\calendar"
 
-add-mailboxfolderpermission $calendar -user $username2 -Accessrights $access -sharingpermissionflags -$flag
+add-mailboxfolderpermission $calendar -user $username2 -Accessrights $access -sharingpermissionflags $flag
 
 }
 
@@ -45,14 +45,14 @@ param(
       [string]$access,
 
 [Parameter(Mandatory=$True,
-          HelpMessage = "Choose delegate or canviewprivateitems or delegate, canviewprivateitems" )]
-             [AllowEmptyString()]
+          HelpMessage = "Choose delegate or canviewprivateitems, "delegate, canviewprivateitems" or none"]
+                  [AllowEmptyString()]
           [string]$flag
 )
 
 $calendar = $username1 + ":" + "\calendar"
 
-set-mailboxfolderpermission $calendar -user $username2 -Accessrights $access -sharingpermissionflags -$flag
+set-mailboxfolderpermission $calendar -user $username2 -Accessrights $access -sharingpermissionflags $flag
 
 }
 
@@ -71,4 +71,4 @@ $calendar = $username + ":" + "\calendar"
 
 get-mailboxfolderpermission $calendar
 
-} 
+}
