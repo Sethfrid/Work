@@ -15,7 +15,7 @@ param(
       [string]$access,
 
 [Parameter(Mandatory=$True,
-          HelpMessage = "Choose delegate or canviewprivateitems, "delegate, canviewprivateitems" or none"]
+          HelpMessage = "Choose delegate or canviewprivateitems, 'delegate, canviewprivateitems' or none")]
                   [AllowEmptyString()]
           [string]$flag
 
@@ -45,7 +45,7 @@ param(
       [string]$access,
 
 [Parameter(Mandatory=$True,
-          HelpMessage = "Choose delegate or canviewprivateitems, "delegate, canviewprivateitems" or none"]
+          HelpMessage = "Choose delegate or canviewprivateitems, 'delegate, canviewprivateitems' or none")]
                   [AllowEmptyString()]
           [string]$flag
 )
