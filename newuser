@@ -73,7 +73,7 @@ param (
           [string]$username
        )
 
-$build = read-host -Prompt "Choose 1 for x86, 2 for x64, 3 for Adobe Standard, 4 for FFB or 5 for Adobe CC."
+$build = read-host -Prompt "Choose 1 for x86, 2 for x64, 3 for FFB or 4 for Adobe CC."
 
 switch ($build) {
 
@@ -81,11 +81,9 @@ switch ($build) {
 
 2 {add-adgroupmember -identity "Production Office x64 Desktop" -members $username}
 
-3 {add-adgroupmember -identity "Production Main Pool" -members $username}
+3 {add-adgroupmember -identity "Production FFB Desktop" -members $username}
 
-4 {add-adgroupmember -identity "Production FFB Desktop" -members $username}
-
-5 {add-adgroupmember -identity "Production AdobeCC Desktop" -members $username}
+4 {add-adgroupmember -identity "Production AdobeCC Desktop" -members $username}
 
 }
 
