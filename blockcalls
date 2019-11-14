@@ -1,0 +1,14 @@
+# For blocking SFBO Inbound calls
+
+#MFA your admin account 
+Import-Module SkypeOnlineConnector
+$sfbSession = New-CsOnlineSession
+Import-PSSession $sfbSession
+
+#Setting up the pattern to block
+
+New-CsInboundBlockedNumberPattern -Description "Block Calls" -Name "BlockAutomatic" -Pattern "^\+440000000000"
+
+#Assigning a number to the block pattern
+
+Set-CsInboundBlockedNumberPattern -Identity "BlockAutomatic" -Pattern "^\+4400000000000"
