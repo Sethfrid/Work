@@ -1,7 +1,4 @@
-#This requires AD module.
-
-
-function create-user {
+function Create-User {
    [cmdletbinding()]
     param(
           [Parameter(Mandatory=$True)]
@@ -15,15 +12,21 @@ function create-user {
 
           [Parameter(Mandatory=$True,
           HelpMessage = "Press Enter if no number to enter")]
+             [AllowEmptyString()]
           [string]$tel,
-          
+
           [Parameter(Mandatory=$True,
           HelpMessage = "Press Enter if no number to enter")]
-          [string]$mobile
+             [AllowEmptyString()]
+          [string]$mobile,
 
+          [Parameter(Mandatory=$True)]
+            [string]$ticket
     )
 
     $sam = $firstname.ToLower() + "." + $lastname.ToLower()
+
+    $date = get-date
 
     $newuser = @{
             displayname = $firstname + " " + $lastname
@@ -31,31 +34,31 @@ function create-user {
             samaccountname = $sam
                givenname = $firstname
                surname = $lastname
-               company = "UK Finance"
+               company = "Company"
                officephone = $tel
-               mobile = $mobile
-               path = "OU=Angel Court Users,OU=Managed Users,DC=domain,DC=,DC="
+            mobile = $mobile
+               path = "OU=Angel Court Users,OU=Managed Users,DC=domain,DC=org,DC=uk"
                title = $jobtitle
-               description = $jobtitle
-               userprincipalname = "$sam@domain"
-               EmailAddress = "$sam@domain"
+               description = "Account created on $date by $env:USERNAME (T# $ticket )"
+               userprincipalname = "$sam@domain.org.uk"
+               EmailAddress = "$sam@domain.org.uk"
                enabled = $true
-               accountpassword = read-host "Enter Password" -AsSecureString
-               Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@domain"), ("SIP:$sam" + "@domain")}
-    }
+               accountpassword = read-host "Enter password for the new user" -AsSecureString
+               Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@domain.org.uk"), ("SIP:$sam" + "@domain.org.uk")}
+                  }
 new-aduser @newuser
 }
 
 
-function group-copy {
+function Copy-Group {
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the first user to copy from")]
+      HelpMessage = "Enter the source SAMACCOUNTNAME")]
       [string]$username1,
 
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME of the second user to copy to")]
+      HelpMessage = "Enter the destination SAMACCOUNTNAME")]
       [string]$username2
 )
 
@@ -66,7 +69,7 @@ Add-ADGroupMember -Members $username2
 }
 
 
-function set-member {
+function Set-Group {
 [cmdletbinding()]
 param (
           [Parameter(Mandatory=$True)]
@@ -100,10 +103,11 @@ add-adgroupmember -identity "sec-domestic-plan" "$username"
 
 add-adgroupmember -identity AIP "$username"
 
+
 }
 
 
-function create-adminuser {
+function Create-Adminuser {
 
     param(
           [Parameter(Mandatory=$True)]
@@ -121,12 +125,11 @@ function create-adminuser {
            samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0]
            givenname = $firstname
            surname = $lastname
-           path = "OU=Admin Accounts,OU=Managed Users,DC=domain,DC=,DC="
-           userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@domain"
+           path = "OU=Admin Accounts,OU=Managed Users,DC=domain,DC=org,DC=uk"
+           userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@domain.org.uk"
            enabled = $true
-           accountpassword = read-host "Enter Password" -AsSecureString
+           accountpassword = read-host "Enter password for new user" -AsSecureString
     }
 new-aduser @params
 
 }
-
