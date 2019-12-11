@@ -1,17 +1,13 @@
-#Requires the connect-exchangeonlineshell module
-
-#This adds a user to the host user's mailbox.
-
-function add-mailbox {
+function Add-Mailbox {
 
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's mailbox")]
+      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail mailbox")]
       [string]$username1,
 
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the mailbox")]
+      HelpMessage = "Enter the destination SAMACCOUNTNAME or E-mail mailbox")]
       [string]$username2,
 
       [Parameter(Mandatory=$True,
@@ -25,14 +21,12 @@ add-mailboxpermission $username1 -user $username2 -Accessrights $access
 }
 
 
-#Check the mailbox permissions for a user.
-
-function check-mailbox {
+function Check-Mailbox {
 
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to see their mailbox ")]
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to check their mailbox permissions")]
       [string]$username
 
 )
@@ -41,56 +35,50 @@ get-mailboxpermission $username
 
 }
 
-#Add the send on behalf of permission 
-
 function add-sendbehalf {
 
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's mailbox")]
+      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail mailbox")]
       [string]$username1,
 
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the mailbox")]
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have send on behalf of permission")]
       [string]$username2
 )
 
 
-add-mailboxpermission $username -grantsendonbehalfto $username1
+add-mailboxpermission $username1 -grantsendonbehalfto $username2
 
 }
 
 
-#Adds the send as permission 
-
-function add-sendas {
+function Add-Sendas {
 
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's mailbox")]
+      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail mailbox")]
       [string]$username1,
 
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the mailbox")]
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have send as permission")]
       [string]$username2
 )
 
 
-add-mailboxpermission $username -accessrights SendAs -Trustee $username1
+add-mailboxpermission $username1 -accessrights SendAs -user $username2
 
 }
 
 
-# Check mailbox rules for a particular user.
-
-function check-mailrules{
+function Check-Mailrules{
 
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to list the rules they have set up")]
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to list the rules they have")]
       [string]$username
 
 )
@@ -99,10 +87,7 @@ get-inboxrule -mailbox $username | select name, description | fl
 
 }
 
-# get all sharedmailboxes and members
-
-function check-sharedmailbox {
+function get-sharedmailbox {
 
 Get-Mailbox -Filter {recipienttypedetails -eq "SharedMailbox"} | Get-Mailboxpermission | where {$_.isinherited -eq $false}  | export-csv C:\temp\fullsharedmailbox.csv
-
-}
+} 
