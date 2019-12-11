@@ -1,23 +1,35 @@
-#This is a script that is run for when a user leaves the business for my current client I support.
+# This removes the attributes Company, Mail, Phone Number, Proxy Addresses and Mobile. 
+#The date/ time stamp along with the ticket number is added to the user under notes in the telephone tab of the user. 
+#Disables the account and moves to the Disabled Users OU
 
-#Enter the username of the leaver and it wil be disabled and moved to the disabled OU and set to null the relevant attributes.
-function disable-user {
+function Disable-User {
 [cmdletbinding()]
 param(
      [Parameter(Mandatory=$True)]
-          [string]$username
+     [string]$username,
+
+     [Parameter(Mandatory=$True,
+     HelpMessage = "Enter ticket number")]
+     [string]$ticketnumber
 )
 
-$date = get-date -Format "dd-MM-yyyy - hh:mm"
-set-aduser $username -clear company, mail, telephonenumber, ProxyAddresses, mobile -replace @{info= "Account disabled on $date by $env:USERNAME"}
+
+
+$date = get-date
+
+set-aduser $username -clear company, mail, title, telephonenumber, mobile -replace @{description= "Account disabled on $date by $env:USERNAME (T# $ticketnumber )"}
+
 disable-adaccount $username
+
 $person = get-aduser $username 
 move-adobject -identity $person.DistinguishedName -targetpath "OU=Disabled Users,OU=Managed Users,DC=domain,DC=org,DC=uk"
 
 }
 
-# This copies the leaver's group members and export it to a text file so it makes it easier if the leaver's replacement can have the same groups
-function remove-group {
+
+#This exports all of the group members for a user then waits 5 seconds before removing them all except for Domain Users group, using the username as the file name under c:\temp
+
+function Remove-Group {
 [cmdletbinding()]
 param (
 [Parameter(Mandatory=$True)]
@@ -25,7 +37,7 @@ param (
 
 )
 
-get-ADPrincipalGroupMembership $username | select name | export-csv c:\temp\$username.csv
+get-ADPrincipalGroupMembership $username | select name | export-csv "\\location\Leaver's Groups\$username.csv"
 
 start-sleep -s 5
 
