@@ -3,27 +3,21 @@ function Add-Calendar {
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the source user's calendar ")]
+      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail calendar")]
       [string]$username1,
 
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the calendar")]
+      HelpMessage = "Enter the destination SAMACCOUNTNAME or E-mail calendar")]
       [string]$username2,
 
       [Parameter(Mandatory=$True,
       HelpMessage = 'Visit this site for full list: https://docs.microsoft.com/en-us/powershell/module/exchange/mailboxes/add-mailboxfolderpermission?view=exchange-ps ')]
-      [string]$access,
-
-[Parameter(Mandatory=$True,
-          HelpMessage = "Choose delegate or canviewprivateitems, 'delegate, canviewprivateitems' or none")]
-                  [AllowEmptyString()]
-          [string]$flag
-
+      [string]$access
 )
 
 $calendar = $username1 + ":" + "\calendar"
 
-add-mailboxfolderpermission $calendar -user $username2 -Accessrights $access -sharingpermissionflags $flag
+add-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
 
 }
 
@@ -33,26 +27,22 @@ function Set-Calendar {
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the source user's calendar ")]
+      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail calendar")]
       [string]$username1,
 
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have access to the calendar")]
+      HelpMessage = "Enter the destination SAMACCOUNTNAME or E-mail calendar")]
       [string]$username2,
 
       [Parameter(Mandatory=$True,
       HelpMessage = 'Visit this site for full list: https://docs.microsoft.com/en-us/powershell/module/exchange/mailboxes/add-mailboxfolderpermission?view=exchange-ps ')]
-      [string]$access,
+      [string]$access
 
-[Parameter(Mandatory=$True,
-          HelpMessage = "Choose delegate or canviewprivateitems, 'delegate, canviewprivateitems' or none")]
-                  [AllowEmptyString()]
-          [string]$flag
 )
 
 $calendar = $username1 + ":" + "\calendar"
 
-set-mailboxfolderpermission $calendar -user $username2 -Accessrights $access -sharingpermissionflags $flag
+set-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
 
 }
 
@@ -62,7 +52,7 @@ function Check-Calendar {
 [cmdletbinding()]
 param(
       [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the source uuser's calendar ")]
+      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user's calendar to check")]
       [string]$username
 
 )
@@ -71,4 +61,4 @@ $calendar = $username + ":" + "\calendar"
 
 get-mailboxfolderpermission $calendar
 
-}
+} 
