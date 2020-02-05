@@ -12,40 +12,42 @@ function Create-User {
 
           [Parameter(Mandatory=$True,
           HelpMessage = "Press Enter if no number to enter")]
-             [AllowEmptyString()]
+                  [AllowEmptyString()]
           [string]$tel,
 
           [Parameter(Mandatory=$True,
           HelpMessage = "Press Enter if no number to enter")]
-             [AllowEmptyString()]
+                  [AllowEmptyString()]
           [string]$mobile,
 
           [Parameter(Mandatory=$True)]
-            [string]$ticket
+                 [string]$ticket
     )
 
     $sam = $firstname.ToLower() + "." + $lastname.ToLower()
 
     $date = get-date
 
+    $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..16 | sort {Get-Random})[0..16] -join '' | ConvertTo-SecureString -AsPlainText -Force
+
     $newuser = @{
             displayname = $firstname + " " + $lastname
             name = $firstname + " " + $lastname
             samaccountname = $sam
-               givenname = $firstname
-               surname = $lastname
-               company = "Company"
-               officephone = $tel
+                    givenname = $firstname
+                    surname = $lastname
+                    company = "UK Finance"
+                    officephone = $tel
             mobile = $mobile
-               path = "OU=Angel Court Users,OU=Managed Users,DC=domain,DC=org,DC=uk"
-               title = $jobtitle
-               description = "Account created on $date by $env:USERNAME (T# $ticket )"
-               userprincipalname = "$sam@domain.org.uk"
-               EmailAddress = "$sam@domain.org.uk"
-               enabled = $true
-               accountpassword = read-host "Enter password for the new user" -AsSecureString
-               Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@domain.org.uk"), ("SIP:$sam" + "@domain.org.uk")}
-                  }
+                    path = "OU=Angel Court Users,OU=Managed Users,DC=xxx,DC=xxx,DC=xx"
+                    title = $jobtitle
+                    description = "Account created on $date by $env:USERNAME (T# $ticket )"
+                    userprincipalname = "$sam@xxx"
+                    EmailAddress = "$sam@xxx"
+                    enabled = $true
+                    accountpassword = $password
+                    Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@xxx"), ("SIP:$sam" + "@xxx")}
+                            }
 new-aduser @newuser
 }
 
@@ -80,13 +82,13 @@ $build = read-host -Prompt "Choose 1 for x86, 2 for x64, 3 for FFB or 4 for Adob
 
 switch ($build) {
 
-1 {add-adgroupmember -identity "Production Main Pool" -members $username}
+1 {add-adgroupmember -identity "Windows Server 2019 - User" -members $username}
 
-2 {add-adgroupmember -identity "Production Office x64 Desktop" -members $username}
+2 {add-adgroupmember -identity "Windows Server 2019 - D&R" -members $username}
 
 3 {add-adgroupmember -identity "Production FFB Desktop" -members $username}
 
-4 {add-adgroupmember -identity "Production AdobeCC Desktop" -members $username}
+4 {add-adgroupmember -identity "Windows Server 2019 - ACC - GPU" -members $username}
 
 }
 
@@ -118,17 +120,19 @@ function Create-Adminuser {
 
     )
 
+$Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..16 | sort {Get-Random})[0..16] -join '' | ConvertTo-SecureString -AsPlainText -Force
+
     $params = @{
 
         displayname = $firstname + " " + $lastname
         name = $firstname + " " + $lastname
-           samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0]
-           givenname = $firstname
-           surname = $lastname
-           path = "OU=Admin Accounts,OU=Managed Users,DC=domain,DC=org,DC=uk"
-           userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@domain.org.uk"
-           enabled = $true
-           accountpassword = read-host "Enter password for new user" -AsSecureString
+                samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0]
+                givenname = $firstname
+                surname = $lastname
+                path = "OU=Admin Accounts,OU=Managed Users,DC=xxx,DC=xxx,DC=xxx"
+                userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@xxx"
+                enabled = $true
+                accountpassword = $password
     }
 new-aduser @params
 
