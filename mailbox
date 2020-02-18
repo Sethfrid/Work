@@ -2,13 +2,11 @@ function Add-Mailbox {
 
 [cmdletbinding()]
 param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail mailbox")]
-      [string]$username1,
+      [Parameter(Mandatory=$True)]
+      [string]$source,
 
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the destination SAMACCOUNTNAME or E-mail mailbox")]
-      [string]$username2,
+      [Parameter(Mandatory=$True)]
+      [string]$destination,
 
       [Parameter(Mandatory=$True,
       HelpMessage = 'Choose one of the following rights "FullAcess" "None" ')]
@@ -16,7 +14,7 @@ param(
 )
 
 
-add-mailboxpermission $username1 -user $username2 -Accessrights $access
+add-mailboxpermission $source -user $destination -Accessrights $access
 
 }
 
@@ -39,17 +37,15 @@ function add-sendbehalf {
 
 [cmdletbinding()]
 param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail mailbox")]
-      [string]$username1,
+      [Parameter(Mandatory=$True)]
+      [string]$source,
 
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have send on behalf of permission")]
-      [string]$username2
+      [Parameter(Mandatory=$True)]
+      [string]$destination
 )
 
 
-add-mailboxpermission $username1 -grantsendonbehalfto $username2
+add-mailboxpermission $source -grantsendonbehalfto $destination
 
 }
 
@@ -58,17 +54,15 @@ function Add-Sendas {
 
 [cmdletbinding()]
 param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail mailbox")]
-      [string]$username1,
+      [Parameter(Mandatory=$True)]
+      [string]$source,
 
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to have send as permission")]
-      [string]$username2
+      [Parameter(Mandatory=$True)]
+      [string]$destination
 )
 
 
-add-mailboxpermission $username1 -accessrights SendAs -user $username2
+add-mailboxpermission $source -accessrights SendAs -user $destination
 
 }
 
