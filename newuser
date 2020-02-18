@@ -36,17 +36,17 @@ function Create-User {
             samaccountname = $sam
                givenname = $firstname
                surname = $lastname
-               company = "UK Finance"
+               company = ""
                officephone = $tel
             mobile = $mobile
-               path = "OU=Angel Court Users,OU=Managed Users,DC=ukfinance,DC=org,DC=uk"
+               path = "OU=Angel Court Users,OU=Managed Users,DC=,DC=,DC="
                title = $jobtitle
                description = "Account created on $date by $env:USERNAME (T# $ticket )"
-               userprincipalname = "$sam@ukfinance.org.uk"
-               EmailAddress = "$sam@ukfinance.org.uk"
+               userprincipalname = "$sam@"
+               EmailAddress = "$sam@"
                enabled = $true
                accountpassword = $password
-               Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@ukfinance.org.uk"), ("SIP:$sam" + "@ukfinance.org.uk")}
+               Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@"), ("SIP:$sam" + "@")}
                   }
 new-aduser @newuser
 }
@@ -127,8 +127,8 @@ $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0.
            samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0]
            givenname = $firstname
            surname = $lastname
-           path = "OU=Admin Accounts,OU=Managed Users,DC=ukfinance,DC=org,DC=uk"
-           userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@ukfinance.org.uk"
+           path = "OU=Admin Accounts,OU=Managed Users,DC=,DC=,DC="
+           userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@"
            enabled = $true
            accountpassword = $password
     }
