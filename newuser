@@ -12,16 +12,16 @@ function Create-User {
 
           [Parameter(Mandatory=$True,
           HelpMessage = "Press Enter if no number to enter")]
-                  [AllowEmptyString()]
+             [AllowEmptyString()]
           [string]$tel,
 
           [Parameter(Mandatory=$True,
           HelpMessage = "Press Enter if no number to enter")]
-                  [AllowEmptyString()]
+             [AllowEmptyString()]
           [string]$mobile,
 
           [Parameter(Mandatory=$True)]
-                 [string]$ticket
+            [string]$ticket
     )
 
     $sam = $firstname.ToLower() + "." + $lastname.ToLower()
@@ -34,20 +34,20 @@ function Create-User {
             displayname = $firstname + " " + $lastname
             name = $firstname + " " + $lastname
             samaccountname = $sam
-                    givenname = $firstname
-                    surname = $lastname
-                    company = "UK Finance"
-                    officephone = $tel
+               givenname = $firstname
+               surname = $lastname
+               company = "UK Finance"
+               officephone = $tel
             mobile = $mobile
-                    path = "OU=Angel Court Users,OU=Managed Users,DC=xxx,DC=xxx,DC=xx"
-                    title = $jobtitle
-                    description = "Account created on $date by $env:USERNAME (T# $ticket )"
-                    userprincipalname = "$sam@xxx"
-                    EmailAddress = "$sam@xxx"
-                    enabled = $true
-                    accountpassword = $password
-                    Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@xxx"), ("SIP:$sam" + "@xxx")}
-                            }
+               path = "OU=Angel Court Users,OU=Managed Users,DC=ukfinance,DC=org,DC=uk"
+               title = $jobtitle
+               description = "Account created on $date by $env:USERNAME (T# $ticket )"
+               userprincipalname = "$sam@ukfinance.org.uk"
+               EmailAddress = "$sam@ukfinance.org.uk"
+               enabled = $true
+               accountpassword = $password
+               Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@ukfinance.org.uk"), ("SIP:$sam" + "@ukfinance.org.uk")}
+                  }
 new-aduser @newuser
 }
 
@@ -55,18 +55,16 @@ new-aduser @newuser
 function Copy-Group {
 [cmdletbinding()]
 param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the source SAMACCOUNTNAME")]
-      [string]$username1,
+      [Parameter(Mandatory=$True)]
+      [string]$source,
 
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the destination SAMACCOUNTNAME")]
-      [string]$username2
+      [Parameter(Mandatory=$True)]
+      [string]$destination
 )
 
-Get-ADUser -Identity $username1 -Properties memberof |
+Get-ADUser -Identity $ource -Properties memberof |
 Select-Object -ExpandProperty memberof |
-Add-ADGroupMember -Members $username2
+Add-ADGroupMember -Members $destination
 
 }
 
@@ -126,14 +124,15 @@ $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0.
 
         displayname = $firstname + " " + $lastname
         name = $firstname + " " + $lastname
-                samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0]
-                givenname = $firstname
-                surname = $lastname
-                path = "OU=Admin Accounts,OU=Managed Users,DC=xxx,DC=xxx,DC=xxx"
-                userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@xxx"
-                enabled = $true
-                accountpassword = $password
+           samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0]
+           givenname = $firstname
+           surname = $lastname
+           path = "OU=Admin Accounts,OU=Managed Users,DC=ukfinance,DC=org,DC=uk"
+           userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@ukfinance.org.uk"
+           enabled = $true
+           accountpassword = $password
     }
 new-aduser @params
 
 }
+
