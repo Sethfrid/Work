@@ -2,22 +2,20 @@ function Add-Calendar {
 
 [cmdletbinding()]
 param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail calendar")]
-      [string]$username1,
+      [Parameter(Mandatory=$True)]
+      [string]$source,
 
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the destination SAMACCOUNTNAME or E-mail calendar")]
-      [string]$username2,
+      [Parameter(Mandatory=$True)]
+      [string]$destination,
 
       [Parameter(Mandatory=$True,
       HelpMessage = 'Visit this site for full list: https://docs.microsoft.com/en-us/powershell/module/exchange/mailboxes/add-mailboxfolderpermission?view=exchange-ps ')]
       [string]$access
 )
 
-$calendar = $username1 + ":" + "\calendar"
+$calendar = $source + ":" + "\calendar"
 
-add-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
+add-mailboxfolderpermission $calendar -user $destination -Accessrights $access
 
 }
 
@@ -26,13 +24,11 @@ function Set-Calendar {
 
 [cmdletbinding()]
 param(
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the source SAMACCOUNTNAME or E-mail calendar")]
-      [string]$username1,
+      [Parameter(Mandatory=$True)]
+      [string]$source,
 
-      [Parameter(Mandatory=$True,
-      HelpMessage = "Enter the destination SAMACCOUNTNAME or E-mail calendar")]
-      [string]$username2,
+      [Parameter(Mandatory=$True)]
+      [string]$destination,
 
       [Parameter(Mandatory=$True,
       HelpMessage = 'Visit this site for full list: https://docs.microsoft.com/en-us/powershell/module/exchange/mailboxes/add-mailboxfolderpermission?view=exchange-ps ')]
@@ -40,9 +36,9 @@ param(
 
 )
 
-$calendar = $username1 + ":" + "\calendar"
+$calendar = $source + ":" + "\calendar"
 
-set-mailboxfolderpermission $calendar -user $username2 -Accessrights $access
+set-mailboxfolderpermission $calendar -user $destination -Accessrights $access
 
 }
 
