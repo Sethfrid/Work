@@ -1,87 +1,173 @@
 function Add-Mailbox {
 
+ 
+
 [cmdletbinding()]
+
 param(
+
       [Parameter(Mandatory=$True)]
+
       [string]$source,
 
+ 
+
       [Parameter(Mandatory=$True)]
+
       [string]$destination,
 
+ 
+
       [Parameter(Mandatory=$True,
+
       HelpMessage = 'Choose one of the following rights "FullAcess" "None" ')]
+
       [string]$access
+
 )
 
+ 
+
+ 
 
 add-mailboxpermission $source -user $destination -Accessrights $access
 
+ 
+
 }
 
+ 
+
+ 
 
 function Check-Mailbox {
 
+ 
+
 [cmdletbinding()]
+
 param(
+
       [Parameter(Mandatory=$True,
+
       HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to check their mailbox permissions")]
+
       [string]$username
 
+ 
+
 )
+
+ 
 
 get-mailboxpermission $username
 
+ 
+
 }
+
+ 
 
 function add-sendbehalf {
 
+ 
+
 [cmdletbinding()]
+
 param(
+
       [Parameter(Mandatory=$True)]
+
       [string]$source,
 
+ 
+
       [Parameter(Mandatory=$True)]
+
       [string]$destination
+
 )
 
+ 
 
-add-mailboxpermission $source -grantsendonbehalfto $destination
+ 
+
+Set-Mailbox -identity $source -grantsendonbehalfto $destination
+
+ 
 
 }
 
+ 
+
+ 
 
 function Add-Sendas {
 
+ 
+
 [cmdletbinding()]
+
 param(
+
       [Parameter(Mandatory=$True)]
+
       [string]$source,
 
+ 
+
       [Parameter(Mandatory=$True)]
+
       [string]$destination
+
 )
 
+ 
 
-add-mailboxpermission $source -accessrights SendAs -user $destination
+ 
+
+Add-RecipientPermission -Identity $source -Trustee -user $destination -accessrights SendAs
+
+ 
 
 }
 
+ 
+
+ 
 
 function Check-Mailrules{
 
+ 
+
 [cmdletbinding()]
+
 param(
+
       [Parameter(Mandatory=$True,
+
       HelpMessage = "Enter the SAMACCOUNTNAME or E-mail of the user to list the rules they have")]
+
       [string]$username
+
+ 
 
 )
 
+ 
+
 get-inboxrule -mailbox $username | select name, description | fl
+
+ 
 
 }
 
+ 
+
 function get-sharedmailbox {
 
-Get-Mailbox -Filter {recipienttypedetails -eq "SharedMailbox"} | Get-Mailboxpermission | where {$_.isinherited -eq $false}  | export-csv C:\temp\fullsharedmailbox.csv
-} 
+ 
+
+Get-Mailbox -Filter {recipienttypedetails -eq "SharedMailbox"} | Get-Mailboxpermission | where {$_.isinherited -eq $false}  | export-csv \fullsharedmailbox.csv -NoTypeInformation
+
+}
