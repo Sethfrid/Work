@@ -1,138 +1,281 @@
 function Create-User {
+
    [cmdletbinding()]
+
     param(
+
           [Parameter(Mandatory=$True)]
+
           [string]$firstname,
 
+ 
+
           [Parameter(Mandatory=$True)]
+
           [string]$lastname,
 
+ 
+
           [Parameter(Mandatory=$True)]
+
           [string]$jobtitle,
 
-          [Parameter(Mandatory=$True,
-          HelpMessage = "Press Enter if no number to enter")]
-             [AllowEmptyString()]
-          [string]$tel,
-
-          [Parameter(Mandatory=$True,
-          HelpMessage = "Press Enter if no number to enter")]
-             [AllowEmptyString()]
-          [string]$mobile,
+ 
 
           [Parameter(Mandatory=$True)]
-            [string]$ticket
+
+             [AllowEmptyString()]
+
+          [string]$tel,
+
+ 
+
+          [Parameter(Mandatory=$True)]
+
+             [AllowEmptyString()]
+
+          [string]$mobile,
+
+ 
+
+          [Parameter(Mandatory=$True)]
+
+             [string]$ticket
+
     )
+
+ 
 
     $sam = $firstname.ToLower() + "." + $lastname.ToLower()
 
+ 
+
     $date = get-date
+
+ 
 
     $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..16 | sort {Get-Random})[0..16] -join '' | ConvertTo-SecureString -AsPlainText -Force
 
+ 
+
     $newuser = @{
+
             displayname = $firstname + " " + $lastname
+
             name = $firstname + " " + $lastname
+
             samaccountname = $sam
+
                givenname = $firstname
+
                surname = $lastname
-               company = ""
+
+               company = "xx"
+
                officephone = $tel
+
             mobile = $mobile
-               path = "OU=Angel Court Users,OU=Managed Users,DC=,DC=,DC="
+
+               path = "OU=Angel Court Users,OU=Managed Users,DC=xx,DC=xx,DC=xx"
+
                title = $jobtitle
+
                description = "Account created on $date by $env:USERNAME (T# $ticket )"
-               userprincipalname = "$sam@"
-               EmailAddress = "$sam@"
+
+               userprincipalname = "$sam@xx.xx.xx"
+
+               EmailAddress = "$sam@xx.xx.xx"
+
                enabled = $true
+
                accountpassword = $password
-               Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@"), ("SIP:$sam" + "@")}
+
+               Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@xx.xx.xx"), ("SIP:$sam" + "@xx.xx.xx")}
+
                   }
+
 new-aduser @newuser
+
+ 
+
+start-sleep -s 5
+
+ 
+
+add-adgroupmember -identity "sec-emsE5" "$sam"
+
+ 
+
+add-adgroupmember -identity "sec-o365e5" "$sam"
+
+ 
+
+add-adgroupmember -identity "sec-proxy-user" "$sam"
+
+ 
+
+add-adgroupmember -identity "sec_proxy-sync" "$sam"
+
+ 
+
+add-adgroupmember -identity "sec-domestic-plan" "$sam"
+
+ 
+
+add-adgroupmember -identity AIP "$sam"
+
+ 
+
+add-adgroupmember -identity "Smartway2 Users" "$sam"
+
+ 
+
+add-adgroupmember -identity "High Q Users" "$sam"
+
+ 
+
 }
 
+ 
+
+ 
 
 function Copy-Group {
+
 [cmdletbinding()]
+
 param(
+
       [Parameter(Mandatory=$True)]
+
       [string]$source,
 
+ 
+
       [Parameter(Mandatory=$True)]
+
       [string]$destination
+
 )
 
-Get-ADUser -Identity $ource -Properties memberof |
+ 
+
+Get-ADUser -Identity $source -Properties memberof |
+
 Select-Object -ExpandProperty memberof |
+
 Add-ADGroupMember -Members $destination
+
+ 
 
 }
 
+ 
 
-function Set-Group {
+ 
+
+function Set-Host {
+
 [cmdletbinding()]
+
 param (
+
           [Parameter(Mandatory=$True)]
+
           [string]$username
+
        )
 
-$build = read-host -Prompt "Choose 1 for x86, 2 for x64, 3 for FFB or 4 for Adobe CC."
+ 
+
+$build = read-host -Prompt "Choose 1 for x86, 2 for D&R, 3 for FFB or 4 for Adobe CC."
+
+ 
 
 switch ($build) {
 
+ 
+
 1 {add-adgroupmember -identity "Windows Server 2019 - User" -members $username}
+
+ 
 
 2 {add-adgroupmember -identity "Windows Server 2019 - D&R" -members $username}
 
+ 
+
 3 {add-adgroupmember -identity "Production FFB Desktop" -members $username}
+
+ 
 
 4 {add-adgroupmember -identity "Windows Server 2019 - ACC - GPU" -members $username}
 
-}
-
-
-add-adgroupmember -identity "sec-emsE5" "$username"
-
-add-adgroupmember -identity "sec-o365e5" "$username"
-
-add-adgroupmember -identity "sec-proxy-user" "$username"
-
-add-adgroupmember -identity "sec_proxy-sync" "$username"
-
-add-adgroupmember -identity "sec-domestic-plan" "$username"
-
-add-adgroupmember -identity AIP "$username"
-
+ 
 
 }
 
+ 
+
+}
+
+ 
+
+ 
+
+ 
 
 function Create-Adminuser {
 
+ 
+
     param(
-          [Parameter(Mandatory=$True)]
-          [string]$firstname,
 
           [Parameter(Mandatory=$True)]
+
+          [string]$firstname,
+
+ 
+
+          [Parameter(Mandatory=$True)]
+
           [string]$lastname
+
+ 
 
     )
 
+ 
+
 $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..16 | sort {Get-Random})[0..16] -join '' | ConvertTo-SecureString -AsPlainText -Force
+
+ 
 
     $params = @{
 
+ 
+
         displayname = $firstname + " " + $lastname
+
         name = $firstname + " " + $lastname
+
            samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0]
+
            givenname = $firstname
+
            surname = $lastname
-           path = "OU=Admin Accounts,OU=Managed Users,DC=,DC=,DC="
-           userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@"
+
+           path = "OU=Admin Accounts,OU=Managed Users,DC=xx,DC=xx,DC=xx"
+
+           userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@xx.xx.xx"
+
            enabled = $true
+
            accountpassword = $password
+
     }
+
 new-aduser @params
 
-}
+ 
 
+}
