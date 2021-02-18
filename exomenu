@@ -1,0 +1,663 @@
+function ConnectEXO {
+
+ 
+
+ 
+
+Connect-ExchangeOnlineShell
+
+ 
+
+}
+
+ 
+
+function CalendarCheck {
+
+ 
+
+[cmdletbinding()]
+
+param(
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname or E-mail of the user's calendar to check")]
+
+      [string]$username
+
+ 
+
+)
+
+ 
+
+ 
+
+get-mailboxfolderpermission ${username}:\calendar | Out-GridView
+
+ 
+
+}
+
+ 
+
+function CalendarAdd {
+
+ 
+
+[cmdletbinding()]
+
+param(
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the user who is sharing their calendar")]
+
+      [string]$from,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the delegate")]
+
+      [string]$to,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = 'Choices are: LimitedDetails, Reviewer, Editor, Owner ')]
+
+      [string]$access
+
+)
+
+ 
+
+ 
+
+add-mailboxfolderpermission ${from}:\calendar -user $to -Accessrights $access
+
+ 
+
+}
+
+ 
+
+function CalendarSet {
+
+ 
+
+[cmdletbinding()]
+
+param(
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the user who is sharing their calendar")]
+
+      [string]$from,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the delegate")]
+
+      [string]$to,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = 'Choices are: LimitedDetails, Reviewer, Editor, Owner ')]
+
+      [string]$access
+
+)
+
+ 
+
+ 
+
+set-mailboxfolderpermission ${from}:\calendar -user $to -Accessrights $access
+
+ 
+
+}
+
+ 
+
+function SkypecalendarAdd {
+
+ 
+
+[cmdletbinding()]
+
+param(
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the user who is sharing their calendar")]
+
+      [string]$from,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the delegate")]
+
+      [string]$to,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = 'Choices are: LimitedDetails, Reviewer, Editor, Owner ')]
+
+      [string]$access
+
+)
+
+    Add-MailboxFolderPermission -identity ${from}:\calendar -User $to -Accessrights $access -SharingPermissionFlags Delegate
+
+    Add-RecipientPermission -identity ${from} -Trustee $to -accessrights SendAs -Confirm:$false
+
+ 
+
+ 
+
+}
+
+ 
+
+function SkypecalendarSet {
+
+ 
+
+[cmdletbinding()]
+
+param(
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the user who is sharing their calendar")]
+
+      [string]$from,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the delegate")]
+
+      [string]$to,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = 'Choices are: LimitedDetails, Reviewer, Editor, Owner ')]
+
+      [string]$access
+
+)
+
+    Set-MailboxFolderPermission -identity ${from}:\calendar -User $to -Accessrights $access -SharingPermissionFlags Delegate
+
+    Add-RecipientPermission -identity ${from} -Trustee $to -accessrights SendAs -Confirm:$false
+
+ 
+
+ 
+
+}
+
+ 
+
+function CalendarRemove {
+
+param(
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the user to remove access from")]
+
+      [string]$from,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the delegate to be removed")]
+
+      [string]$to
+
+)
+
+ 
+
+    Remove-MailboxFolderPermission -identity ${from}:\calendar -User $to -Confirm:$True
+
+    Remove-RecipientPermission -identity ${from} -Trustee $to -AccessRights SendAS -Confirm:$True
+
+  
+
+ 
+
+}
+
+ 
+
+function MailboxCheck {
+
+ 
+
+[cmdletbinding()]
+
+param(
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter the firstname.surname of the user's mailbox to check")]
+
+      [string]$username
+
+ 
+
+)
+
+ 
+
+get-mailboxpermission $username | Out-GridView
+
+ 
+
+}
+
+ 
+
+function MailboxAdd {
+
+ 
+
+[cmdletbinding()]
+
+param(
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the user who is sharing their mailbox")]
+
+      [string]$from,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = "Enter firstname.surname of the delegate")]
+
+      [string]$to,
+
+ 
+
+      [Parameter(Mandatory=$True,
+
+      HelpMessage = 'Choose one of the following rights "FullAcess" "None" ')]
+
+      [string]$access
+
+)
+
+ 
+
+ 
+
+add-mailboxpermission $from -user $to -Accessrights $access
+
+ 
+
+}
+
+ 
+
+ 
+
+ 
+
+#This is the main part of the menu, the above functions are called within this script.
+
+ 
+
+function EXOMENU {
+
+    cls
+
+    Write-Host "================ MENU ================"
+
+   
+
+    Write-Host "s: Sign into Exchange Online"
+
+    Write-Host " "
+
+    Write-Host "c: Calendar settings"
+
+    Write-Host " "
+
+    Write-Host "m: Mailbox settings"
+
+    Write-Host " "
+
+ 
+
+    Write-Host "e: EXIT"
+
+ 
+
+}
+
+ 
+
+function Submenu1 {
+
+ 
+
+    cls
+
+ 
+
+    Write-Host "================ CALENDAR SETTINGS ================"
+
+    Write-Host " "
+
+    Write-Host "1: Check calendar permissions"
+
+    Write-Host " "
+
+    Write-Host "2: Add calendar permission"
+
+    Write-Host " "
+
+    Write-Host "3: Fix calendar permission"
+
+    Write-Host " "
+
+    Write-Host "================ DELEGATE SETTINGS ================"
+
+    Write-Host " "
+
+    Write-Host "4: Add skype and calendar permissions"
+
+    Write-Host " "
+
+    Write-Host "5: Fix skype and calendar permissions"
+
+    Write-Host " "
+
+    Write-Host "x: Remove skype and calendar permissions"
+
+    Write-host " "
+
+    Write-Host "b: Back to main menu"
+
+ 
+
+}
+
+ 
+
+function Submenu2 {
+
+ 
+
+    cls
+
+ 
+
+    Write-Host "================ MAILBOX SETTINGS ================"
+
+    Write-Host " "
+
+    Write-Host "6: Check mailbox settings"
+
+    Write-Host " "
+
+    Write-Host "7: Add Mailbox Access"
+
+    Write-Host " "
+
+    Write-Host "b: Back to main menu"
+
+ 
+
+}
+
+ 
+
+do {
+
+ 
+
+    EXOMenu
+
+    Write-host " "
+
+    Write-host " "
+
+    $selection = Read-Host "Please make a selection"
+
+    switch ($selection)
+
+    {
+
+ 
+
+    's' {
+
+ 
+
+    ConnectEXO
+
+ 
+
+        }
+
+ 
+
+   'c' {
+
+    do {
+
+ 
+
+    Submenu1
+
+    Write-host " "
+
+    Write-host " "
+
+    $choice = Read-Host "Please make a selection"
+
+    switch ($choice)
+
+    {
+
+ 
+
+   '1' {
+
+   
+
+    CalendarCheck
+
+    pause
+
+ 
+
+    }
+
+ 
+
+    '2' {
+
+   
+
+    CalendarAdd
+
+    pause
+
+ 
+
+    }
+
+ 
+
+    '3' {
+
+ 
+
+    CalendarSet
+
+    pause
+
+ 
+
+    }
+
+ 
+
+    '4' {
+
+ 
+
+    SkypecalendarAdd
+
+ 
+
+    }
+
+ 
+
+    '5' {
+
+ 
+
+    SkypecalendarSet
+
+ 
+
+    }
+
+ 
+
+    'x' {
+
+ 
+
+    CalendarRemove
+
+ 
+
+    }
+
+  
+
+}
+
+ 
+
+}
+
+ 
+
+until ($choice -eq 'b')
+
+ 
+
+    }
+
+ 
+
+    'm' {
+
+    do {
+
+ 
+
+    Submenu2
+
+    Write-host " "
+
+    Write-host " "
+
+    $choice = Read-Host "Please make a selection"
+
+    switch ($choice)
+
+    {
+
+ 
+
+   '6' {
+
+    MailboxCheck
+
+    pause
+
+ 
+
+    }
+
+ 
+
+    '7' {
+
+    MailboxAdd
+
+    pause
+
+ 
+
+    }
+
+ 
+
+  
+
+}
+
+ 
+
+}
+
+ 
+
+until ($choice -eq 'b')
+
+ 
+
+    }
+
+ 
+
+ 
+
+  
+
+}
+
+ 
+
+}
+
+ 
+
+until ($selection -eq 'e')
+
+ 
+
+EXIT
