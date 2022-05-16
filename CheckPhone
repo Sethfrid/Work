@@ -1,0 +1,8 @@
+﻿function Check-Phone {
+
+
+$phone = Read-Host "Enter Phone, can use *"
+
+Get-ADUser -filter {enabled -eq $true} -SearchBase "OU=,OU=Managed Users,DC=,DC=,DC=" -properties officephone | where officephone -Like $phone | select name, officephone
+
+}
