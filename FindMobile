@@ -1,0 +1,8 @@
+﻿function Check-Mobile {
+
+
+$mobile = Read-Host "Enter Mobile, can use *"
+
+Get-ADUser -filter {enabled -eq $true} -SearchBase "OU=  ,OU=Managed Users,DC=,DC=,DC=" -properties mobile, department | where mobile -Like $mobile | select name, mobile, department
+
+}
