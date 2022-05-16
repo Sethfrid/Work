@@ -1,0 +1,73 @@
+﻿function move-user {
+    cls
+    Write-Host "================ MENU ================"
+    
+    Write-Host "1: Backup user's old access and add new access to existing (transition period)"
+    Write-Host " "
+    Write-Host "2: Clear access and replicate"
+    Write-Host " "
+
+    Write-Host "e: EXIT"
+}
+
+do {
+
+    move-user
+    Write-host " "
+    Write-host " "
+    $selection = Read-Host "Please make a selection"
+    switch ($selection)
+    {
+
+    '1' {
+
+   $user1 = read-host "Enter the username of the user that is moving department"
+   $user2 = Read-Host "Enter the username of the user to replicate access from"
+
+   get-ADPrincipalGroupMembership $user1 | select name | export-csv "\IT\JML\Mover's Groups\$user1.csv"
+
+   Get-ADUser -Identity $user2 -Properties memberof |
+   Select-Object -ExpandProperty memberof |
+   Add-ADGroupMember -Members $user1
+
+   Write-host " "
+   Write-host " "
+   Write-Host "$user1's security groups has now been backed up to U:\IT\JML\Mover's Groups"
+
+   Write-host " "
+
+   Write-Host "$user2's access has now been applied on top of $user1's access for their transition period"
+   Write-host " "
+   PAUSE
+
+        }
+
+   '2'  {
+
+   $user1 = read-host "Enter the username of the user that is moving department"
+
+   get-ADPrincipalGroupMembership $user1 | where {$_.Name -notlike "Domain Users"} | foreach {Remove-ADPrincipalGroupMembership $user1 -memberof $_ -Confirm:$false}
+
+   $user2 = Read-Host "Enter the username of the user to replicate access from"
+
+   Get-ADUser -Identity $user2 -Properties memberof |
+   Select-Object -ExpandProperty memberof |
+   Add-ADGroupMember -Members $user1
+
+   Write-host " "
+   Write-host " "
+   Write-Host "$user1's access has been reset and new access has been replicated from $user2"
+   Write-host " "
+   Write-Host "Please do a manual check of the security groups for $user1 are as expected"
+   Write-host " "
+   PAUSE
+
+        }
+
+}
+
+}
+
+until ($selection -eq 'e')
+
+EXIT
