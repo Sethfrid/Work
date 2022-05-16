@@ -1,0 +1,17 @@
+﻿function EC-CalendarSetup {
+
+$email = get-aduser -Filter {department -like "Economic Crime"} -properties userprincipalname | select userprincipalname
+$from = read-host "Enter the username"
+
+ForEach ($mail in $email) {
+
+#Start-Sleep -Seconds 15
+
+add-mailboxfolderpermission -Identity ${from}:\calendar -user $mail.userprincipalname -Accessrights reviewer
+
+
+}
+
+}
+
+#It will add the user into their own calendar as well
