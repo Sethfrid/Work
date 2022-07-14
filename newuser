@@ -15,7 +15,8 @@ Write-Host " "
 Write-Host "---------- Phones ----------"
 Write-Host " "
 Write-Host " "
-$tel = Read-Host "Teams number (last 4 digits only)"
+$tel = Read-Host "Enter 1 if user is an intern/ short term otherwise enter 2"
+$phone = Read-Host "Enter last 4 digits"
 $mob = Read-Host "Mobile number"
 Write-Host " "
 Write-Host " "
@@ -51,7 +52,12 @@ Write-Host " "
 	        givenname = $firstname
 	        surname = $lastname
 	        company = "Company"
-	        officephone = "+ $tel"
+	        officephone = switch ($tel)
+		{
+		1 {"00000 $phone"}
+		
+		2 {"00000 $phone"}
+		}
             mobile = $mobile
             manager = $manager
 	        path = "OU=,OU=Managed Users,DC=,DC=,DC="
