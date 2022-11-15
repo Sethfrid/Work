@@ -1,33 +1,30 @@
-﻿function Create-User {
-Write-Host " "
-Write-Host "---------- Create a new user ---------- "
-Write-Host " "
-Write-Host " "
-$ticket = Read-Host "Starter form ticket number"
-Write-Host " "
-$firstname = Read-Host "Firstname"
-$lastname = Read-Host "Lastname"
-$jobtitle = Read-Host "Job Title"
-$dept = Read-Host "Department"
-$manager = Read-Host "Users Manager  (firstname.lastname)"
-Write-Host " "
+function Create-User {
+$ticket = Read-Host "Enter Connect Wise ticket number"
+$firstname = Read-Host "Enter first name"
+$lastname = Read-Host "Enter surname"
+$jobtitle = Read-Host "Title of New Starter"
+$dept = Read-Host " Enter one of the numbers for the department
+
+1 - 
+2 - 
+3 - 
+4 - 
+5 - 
+"
+
+$manager = Read-Host "Enter the manager's username"
 Write-Host " "
 Write-Host "---------- Phones ----------"
 Write-Host " "
-Write-Host " "
 $tel = Read-Host "Enter 1 if user is an intern/ short term otherwise enter 2"
 $phone = Read-Host "Enter last 4 digits"
-$mob = Read-Host "Mobile number"
-Write-Host " "
+$mob = Read-Host "Enter a mobile number"
 Write-Host " "
 Write-Host "---------- Folder Access ----------"
 Write-Host " "
-Write-Host " "
 $copyaccessfrom = Read-Host "Copy file share access from who?  (firstname.lastname)"
 Write-Host " "
-Write-Host " "
 Write-Host "---------- Leaving Date ----------"
-Write-Host " "
 Write-Host " "
 $enddate = Read-Host "Leaving date  (MM/DD/YYYY) add 1 day extra"
 Write-Host " "
@@ -52,23 +49,38 @@ Write-Host " "
 	        givenname = $firstname
 	        surname = $lastname
 	        company = "Company"
-	        officephone = switch ($tel)
-		{
-		1 {"00000 $phone"}
-		
-		2 {"00000 $phone"}
-		}
+	        department = switch ($dept) 
+            {
+
+            1 {""}
+
+            2 {""}
+
+            3 {""}
+
+            4 {""}
+
+            5 {""}
+
+            }
             mobile = $mobile
             manager = $manager
-	        path = "OU=,OU=Managed Users,DC=,DC=,DC="
+	        path = "OU=Angel Court Users,OU=Managed Users,DC=,DC=,DC="
 	        title = $jobtitle
-            department = $dept
+            officephone = switch ($dept)
+            {
+
+            1 {"+44 20 4582 $phone"}
+
+            2 {"+44 20 3934 $phone"}
+
+            }
 	        description = "Account created on $date by $env:USERNAME (T# $ticket )"
-	        userprincipalname = "$sam@"
-	        EmailAddress = "$sam@"
+	        userprincipalname = "$sam@domain"
+	        EmailAddress = "$sam@domain"
 	        enabled = $true
 	        accountpassword = $password
-	        Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@"), ("SIP:$sam" + "@")}
+	        Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@domain"), ("SIP:$sam" + "@domain")}
 		    }
  new-aduser @newuser
 
@@ -102,6 +114,8 @@ Add-ADGroupMember -identity sec-FSLogix-Teams "$sam"
 
 Add-ADGroupMember -identity Exclaimer_AD_All_Staff "$sam"
 
+Add-ADGroupMember -identity user-salesforce "$sam"
+
 
 Get-ADUser -Identity $copyaccessfrom -Properties memberof |
 Select-Object -ExpandProperty memberof |
@@ -118,49 +132,6 @@ Invoke-Command -ComputerName core-aadc-01 -ScriptBlock {sync}
 }
 
 
-function Copy-Group {
-[cmdletbinding()]
-param(
-      [Parameter(Mandatory=$True)]
-      [string]$from,
-
-      [Parameter(Mandatory=$True)]
-      [string]$to
-)
-
-Get-ADUser -Identity $from -Properties memberof |
-Select-Object -ExpandProperty memberof |
-Add-ADGroupMember -Members $to
-
-}
 
 
-function Create-Adminuser {
-
-    param(
-          [Parameter(Mandatory=$True)]
-          [string]$firstname,
-
-          [Parameter(Mandatory=$True)]
-          [string]$lastname
-
-    )
-
-$Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..16 | sort {Get-Random})[0..16] -join '' | ConvertTo-SecureString -AsPlainText -Force
-
-    $params = @{
-
-        displayname = $firstname + " " + $lastname
-        name = $firstname + " " + $lastname
-	    samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0]
-	    givenname = $firstname
-	    surname = $lastname
-	    path = "OU=Admin Accounts,OU=Managed Users,DC=,DC=,DC="
-	    userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $lastname.ToLower()[0] + "@"
-	    enabled = $true
-	    accountpassword = $password
-    }
-new-aduser @params
-
-}
 
