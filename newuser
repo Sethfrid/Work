@@ -67,12 +67,12 @@ Write-Host " "
             manager = $manager
 	        path = "OU=Angel Court Users,OU=Managed Users,DC=,DC=,DC="
 	        title = $jobtitle
-            officephone = switch ($dept)
+            officephone = switch ($tel)
             {
 
-            1 {"+44 20 4582 $phone"}
+            1 {" $phone"}
 
-            2 {"+44 20 3934 $phone"}
+            2 {" $phone"}
 
             }
 	        description = "Account created on $date by $env:USERNAME (T# $ticket )"
@@ -90,33 +90,6 @@ Set-ADAccountExpiration -identity $sam -DateTime $enddate
 
 add-adgroupmember -identity "License - Enterprise Mobility Security E5" "$sam"
 
-add-adgroupmember -identity "License - Microsoft Office 365 E5" "$sam"
-
-add-adgroupmember -identity sec-proxy-user "$sam"
-
-add-adgroupmember -identity sec_proxy-sync "$sam"
-
-add-adgroupmember -identity "License - Microsoft 365 Domestic Calling Plan" "$sam"
-
-add-adgroupmember -identity AIP "$sam"
-
-add-adgroupmember -identity "Smartway2 Users" "$sam"
-
-add-adgroupmember -identity "Intune-users" "$sam"
-
-add-adgroupmember -identity "Windows Server 2019 - User" "$sam"
-
-add-adgroupmember -identity "Zoom Outlook Users" "$sam"
-
-add-adgroupmember -identity "Zoom Meeting Organisers" "$sam"
-
-Add-ADGroupMember -identity sec-FSLogix-Teams "$sam"
-
-Add-ADGroupMember -identity Exclaimer_AD_All_Staff "$sam"
-
-Add-ADGroupMember -identity user-salesforce "$sam"
-
-
 Get-ADUser -Identity $copyaccessfrom -Properties memberof |
 Select-Object -ExpandProperty memberof |
 Add-ADGroupMember -Members $sam
@@ -127,7 +100,7 @@ Add-ADGroupMember -Members $sam
 
  start-sleep -s 5
 
-Invoke-Command -ComputerName core-aadc-01 -ScriptBlock {sync}
+Invoke-Command -ComputerName  -ScriptBlock {sync}
 
 }
 
