@@ -19,10 +19,11 @@ start-sleep -s 3
 
 get-ADPrincipalGroupMembership $username | where {$_.Name -notlike "Domain Users" -and $_.Name -notlike "License - Enterprise Mobility Security E5" -and $_.Name -notlike "License - Microsoft Office 365 E5"} | foreach {Remove-ADPrincipalGroupMembership $username -memberof $_ -Confirm:$false}
 
-
 $date = get-date
 
 set-aduser $username -clear company, department, mail, telephonenumber, mobile -replace @{description= "Account disabled on $date by $env:USERNAME (T# $ticketnumber )"}
+
+Get-ADUser $username -Properties DirectReports | select -expandproperty DirectReports | Set-ADUser -clear manager
 
 disable-adaccount $username
 
