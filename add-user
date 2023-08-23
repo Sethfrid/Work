@@ -1,0 +1,226 @@
+#This has been tweaked slightly so it works in Powershell 7
+
+function Add-User {
+
+[cmdletbinding()]
+
+param (
+
+[Parameter(Mandatory=$True)]
+[string]$ticket,
+[Parameter(Mandatory=$True)]
+[string]$firstname,
+[Parameter(Mandatory=$True)]
+[string]$surname,
+[Parameter(Mandatory=$True, HelpMessage="Enter the username")]
+[string]$manager,
+[Parameter(Mandatory=$True)]
+[string]$jobtitle
+
+)
+
+$dept = Read-Host " Enter a number for the department
+
+
+1 - 1
+2 - 2
+3 - 3
+4 - 4
+5 - 5
+6 - 6
+7 - 7
+8 - 8
+9 - 9
+10 - 10
+11 - 11
+12 - 12
+13 - 13
+14 - 14
+15 - 15
+16 - 16
+17 - 17
+18 - 18
+19 - 19
+20 - 20
+21 - 21
+22 - 22
+"
+
+Write-Host "---------- Teams Number ----------"
+Write-Host " "
+$tel = Read-Host "Enter 1 if user is an intern/ short term otherwise enter 2"
+$phone = Read-Host "Enter last 4 digits"
+$mob = Read-Host "Enter a mobile number"
+Write-Host " "
+Write-Host "---------- Folder Access ----------"
+Write-Host " "
+$copyaccessfrom = Read-Host "Copy file share access from who?  (firstname.surname)"
+Write-Host " "
+Write-Host "---------- Leaving Date ----------"
+Write-Host " "
+$enddate = Read-Host "Leaving date  (MM/DD/YYYY) add 1 day extra"
+Write-Host " "
+Write-Host " "
+   
+
+    $sam = $firstname.ToLower() + "." + $surname.ToLower()
+
+    $date = get-date
+
+    $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..16 | sort {Get-Random})[0..16] -join '' | ConvertTo-SecureString -AsPlainText -Force
+
+    $newuser = @{
+            displayname = $firstname + " " + $surname
+            name = $firstname + " " + $surname
+            samaccountname = $sam
+	        givenname = $firstname
+	        surname = $surname
+	        company = "UK Finance"
+	        department = switch ($dept) 
+            {
+
+            1 {"1"}
+
+            2 {"2"}
+
+            3 {"3"}
+
+            4 {"4"}
+
+            5 {"5"}
+
+            6 {"6"}
+
+            7 {"7"}
+
+            8 {"8"}
+
+            9 {"9"}
+
+            10 {"10"}
+
+            11 {"11"}
+
+            12 {"12"}
+
+            13 {"13"}
+
+            14 {"14"}
+
+            15 {"15"}
+
+            16 {"16"}
+
+            17 {"17"}
+
+            18 {"18"}
+
+            19 {"19"}
+
+            20 {"20"}
+
+            21 {"21"}
+
+            22 {"22"}
+
+            }
+            mobile = $mobile
+            manager = $manager
+	        path = "OU=Users,OU=Managed Users,DC=,DC=,DC="
+	        title = $jobtitle
+            officephone = switch ($tel)
+            {
+
+            1 {"+44 20 4582 $phone"}
+
+            2 {"+44 20 3934 $phone"}
+
+            }
+	        description = "Account created on $date by $env:USERNAME (T# $ticket )"
+	        userprincipalname = "$sam@domain"
+	        EmailAddress = "$sam@domain"
+	        enabled = $true
+	        accountpassword = $password
+	       
+		    }
+ new-aduser @newuser
+
+start-sleep -s 3
+
+set-aduser $sam -Add @{ProxyAddresses=("SMTP:$sam" + "@domaink")}
+
+set-aduser  $sam -Add @{ProxyAddresses=("SIP:$sam" + "@domain")}
+
+Set-ADAccountExpiration -identity $sam -DateTime $enddate
+
+add-adgroupmember -identity "License - Microsoft 365 Domestic Calling Plan" "$sam"
+
+add-adgroupmember -identity "License - Microsoft 365 E5" "$sam"
+
+add-adgroupmember -identity sec-proxy-user "$sam"
+
+add-adgroupmember -identity sec_proxy-sync "$sam"
+
+add-adgroupmember -identity AIP "$sam"
+
+add-adgroupmember -identity "Smartway2 Users" "$sam"
+
+add-adgroupmember -identity "Intune-users" "$sam"
+
+add-adgroupmember -identity "Windows Server 2019 - User" "$sam"
+
+add-adgroupmember -identity "Zoom Outlook Users" "$sam"
+
+add-adgroupmember -identity "Zoom Meeting Organisers" "$sam"
+
+Add-ADGroupMember -identity sec-FSLogix-Teams "$sam"
+
+Add-ADGroupMember -identity Exclaimer_AD_All_Staff "$sam"
+
+
+Get-ADUser -Identity $copyaccessfrom -Properties memberof |
+Select-Object -ExpandProperty memberof |
+Add-ADGroupMember -Members $sam
+
+ Write-Host ""
+ Write-Host "Account created for $sam"
+ Write-Host " "
+
+ start-sleep -s 3
+
+Invoke-Command -ComputerName core-aadc-01 -ScriptBlock {sync}
+
+}
+
+
+
+function Create-Adminuser {
+
+    param(
+          [Parameter(Mandatory=$True)]
+          [string]$firstname,
+
+          [Parameter(Mandatory=$True)]
+          [string]$surname
+
+    )
+
+$Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..16 | sort {Get-Random})[0..16] -join '' | ConvertTo-SecureString -AsPlainText -Force
+
+    $params = @{
+
+        displayname = $firstname + " " + $surname
+        name = $firstname + " " + $surname
+	    samaccountname = "adminqnrl" + $firstname.ToLower()[0] + $surname.ToLower()[0]
+	    givenname = $firstname
+	    surname = $surname
+	    path = "OU=Admin Accounts,OU=Managed Users,DC=,DC=,DC="
+	    userprincipalname = "adminqnrl" + $firstname.ToLower()[0] + $surname.ToLower()[0] + "@domain"
+	    enabled = $true
+	    accountpassword = $password
+    }
+new-aduser @params
+
+}
+
+
