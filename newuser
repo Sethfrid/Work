@@ -90,13 +90,7 @@ Set-ADAccountExpiration -identity $sam -DateTime $enddate
 
 add-adgroupmember -identity "License - Enterprise Mobility Security E5" "$sam"
 
-Get-ADUser -Identity $copyaccessfrom -Properties memberof |
-Select-Object -ExpandProperty memberof |
-Add-ADGroupMember -Members $sam
-
- Write-Host ""
- Write-Host "Account created for $sam"
- Write-Host " "
+Get-ADPrincipalGroupMembership -Identity $copyaccessfrom | Where-Object {$_.Name -like 'user*'} | Add-ADGroupMember -members $sam
 
  start-sleep -s 5
 
