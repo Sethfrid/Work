@@ -5,8 +5,7 @@ $lastname = Read-Host "Enter surname"
 $jobtitle = Read-Host "Title of New Starter"
 $manager = Read-Host "Enter the manager's username"
 
-$dept = get-aduser $manager -properties department | select department
-$dpt = $dept.department
+$dept = get-aduser $manager -properties department 
 
 Write-Host " "
 Write-Host "---------- Phones ----------"
