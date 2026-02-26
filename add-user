@@ -19,32 +19,8 @@ param (
 
 )
 
-$dept = Read-Host " Enter a number for the department
-
-
-1 - 1
-2 - 2
-3 - 3
-4 - 4
-5 - 5
-6 - 6
-7 - 7
-8 - 8
-9 - 9
-10 - 10
-11 - 11
-12 - 12
-13 - 13
-14 - 14
-15 - 15
-16 - 16
-17 - 17
-18 - 18
-19 - 19
-20 - 20
-21 - 21
-22 - 22
-"
+$dept = get-aduser $manager -properties department | select department
+$dpt = $dept.department
 
 Write-Host "---------- Teams Number ----------"
 Write-Host " "
@@ -76,54 +52,7 @@ Write-Host " "
 	        givenname = $firstname
 	        surname = $surname
 	        company = "UK Finance"
-	        department = switch ($dept) 
-            {
-
-            1 {"1"}
-
-            2 {"2"}
-
-            3 {"3"}
-
-            4 {"4"}
-
-            5 {"5"}
-
-            6 {"6"}
-
-            7 {"7"}
-
-            8 {"8"}
-
-            9 {"9"}
-
-            10 {"10"}
-
-            11 {"11"}
-
-            12 {"12"}
-
-            13 {"13"}
-
-            14 {"14"}
-
-            15 {"15"}
-
-            16 {"16"}
-
-            17 {"17"}
-
-            18 {"18"}
-
-            19 {"19"}
-
-            20 {"20"}
-
-            21 {"21"}
-
-            22 {"22"}
-
-            }
+	        department =  $dept.department
             mobile = $mobile
             manager = $manager
 	        path = "OU=Users,OU=Managed Users,DC=,DC=,DC="
@@ -154,28 +83,6 @@ set-aduser  $sam -Add @{ProxyAddresses=("SIP:$sam" + "@domain")}
 Set-ADAccountExpiration -identity $sam -DateTime $enddate
 
 add-adgroupmember -identity "License - Microsoft 365 Domestic Calling Plan" "$sam"
-
-add-adgroupmember -identity "License - Microsoft 365 E5" "$sam"
-
-add-adgroupmember -identity sec-proxy-user "$sam"
-
-add-adgroupmember -identity sec_proxy-sync "$sam"
-
-add-adgroupmember -identity AIP "$sam"
-
-add-adgroupmember -identity "Smartway2 Users" "$sam"
-
-add-adgroupmember -identity "Intune-users" "$sam"
-
-add-adgroupmember -identity "Windows Server 2019 - User" "$sam"
-
-add-adgroupmember -identity "Zoom Outlook Users" "$sam"
-
-add-adgroupmember -identity "Zoom Meeting Organisers" "$sam"
-
-Add-ADGroupMember -identity sec-FSLogix-Teams "$sam"
-
-Add-ADGroupMember -identity Exclaimer_AD_All_Staff "$sam"
 
 
 Get-ADUser -Identity $copyaccessfrom -Properties memberof |
