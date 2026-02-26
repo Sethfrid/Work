@@ -19,8 +19,8 @@ param (
 
 )
 
-$dept = get-aduser $manager -properties department | select department
-$dpt = $dept.department
+$dept = get-aduser $manager -properties department
+
 
 Write-Host "---------- Teams Number ----------"
 Write-Host " "
