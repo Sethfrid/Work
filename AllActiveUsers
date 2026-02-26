@@ -1,5 +1,4 @@
 function Get-AllActiveUsers {
 
-get-aduser -filter {enabled -eq $true} -SearchBase "OU=,OU=Managed Users,DC=,DC=,DC=" -Properties * | Select GivenName, Surname, title, Department, mail |  Sort GivenName | export-csv \\ukfinance.org.uk\ukf\IT\activeusers.csv -NoTypeInformation
-
+get-aduser -filter {enabled -eq $true} -SearchBase "OU=,OU=Managed Users,DC=,DC=,DC=" -Properties * | Select GivenName, Surname, title, Department, mail |  Sort GivenName 
 }
