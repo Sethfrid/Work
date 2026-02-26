@@ -3,16 +3,11 @@ $ticket = Read-Host "Enter Connect Wise ticket number"
 $firstname = Read-Host "Enter first name"
 $lastname = Read-Host "Enter surname"
 $jobtitle = Read-Host "Title of New Starter"
-$dept = Read-Host " Enter one of the numbers for the department
-
-1 - 
-2 - 
-3 - 
-4 - 
-5 - 
-"
-
 $manager = Read-Host "Enter the manager's username"
+
+$dept = get-aduser $manager -properties department | select department
+$dpt = $dept.department
+
 Write-Host " "
 Write-Host "---------- Phones ----------"
 Write-Host " "
@@ -49,23 +44,10 @@ Write-Host " "
 	        givenname = $firstname
 	        surname = $lastname
 	        company = "Company"
-	        department = switch ($dept) 
-            {
-
-            1 {""}
-
-            2 {""}
-
-            3 {""}
-
-            4 {""}
-
-            5 {""}
-
-            }
+	        department =  $dept.department
             mobile = $mobile
             manager = $manager
-	        path = "OU=Angel Court Users,OU=Managed Users,DC=,DC=,DC="
+	        path = "OU=OU,OU=Managed Users,DC=,DC=,DC="
 	        title = $jobtitle
             officephone = switch ($tel)
             {
