@@ -1,85 +1,122 @@
 function Create-User {
-$ticket = Read-Host "Enter Connect Wise ticket number"
-$firstname = Read-Host "Enter first name"
-$lastname = Read-Host "Enter surname"
-$jobtitle = Read-Host "Title of New Starter"
-$manager = Read-Host "Enter the manager's username"
 
-$dept = get-aduser $manager -properties department 
+[cmdletbinding()]
 
+param (
+
+[Parameter(Mandatory=$True)]
+[string]$ticket,
+
+[Parameter(Mandatory=$True)]
+[string]$firstname,
+
+[Parameter(Mandatory=$True)]
+[string]$surname,
+
+[Parameter(Mandatory=$True, HelpMessage="Enter the username")]
+[string]$manager,
+
+[Parameter(Mandatory=$True)]
+[string]$jobtitle
+
+)
+
+try {
+    $dept = Get-ADUser $manager -Properties Department -ErrorAction Stop
+}
+catch {
+    Write-Error "Manager '$manager' not found in Active Directory."
+    return
+}
+
+Write-Host "---------- Teams Number ----------"
 Write-Host " "
-Write-Host "---------- Phones ----------"
+$tel = Read-Host "Please enter the last 4 digits of the teams number to assign."
 Write-Host " "
-$tel = Read-Host "Enter 1 if user is an intern/ short term otherwise enter 2"
-$phone = Read-Host "Enter last 4 digits"
-$mob = Read-Host "Enter a mobile number"
-Write-Host " "
-Write-Host "---------- Folder Access ----------"
-Write-Host " "
-$copyaccessfrom = Read-Host "Copy file share access from who?  (firstname.lastname)"
-Write-Host " "
+
 Write-Host "---------- Leaving Date ----------"
 Write-Host " "
-$enddate = Read-Host "Leaving date  (MM/DD/YYYY) add 1 day extra"
+$enddate = [datetime](Read-Host "Leaving date (MM/DD/YYYY) add 1 day extra")
 Write-Host " "
-Write-Host " "
-   
-   
-   
 
-    $sam = $firstname.ToLower() + "." + $lastname.ToLower()
+$sam = ($firstname + "." + $surname).ToLower()
 
-    Write-Host "Creating user $sam.."
-    Write-Host " "
+$date = Get-Date
 
-    $date = get-date
+$Password = (
+    ([char[]](33..95) + [char[]](97..126)) + (0..16) |
+    Sort-Object {Get-Random}
+)[0..16] -join '' | ConvertTo-SecureString -AsPlainText -Force
 
-    $Password = ([char[]]([char]33..[char]95) + ([char[]]([char]97..[char]126)) + 0..16 | sort {Get-Random})[0..16] -join '' | ConvertTo-SecureString -AsPlainText -Force
+$newuser = @{
 
-    $newuser = @{
-            displayname = $firstname + " " + $lastname
-            name = $firstname + " " + $lastname
-            samaccountname = $sam
-	        givenname = $firstname
-	        surname = $lastname
-	        company = "Company"
-	        department =  $dept.department
-            mobile = $mobile
-            manager = $manager
-	        path = "OU=OU,OU=Managed Users,DC=,DC=,DC="
-	        title = $jobtitle
-            officephone = switch ($tel)
-            {
-
-            1 {" $phone"}
-
-            2 {" $phone"}
-
-            }
-	        description = "Account created on $date by $env:USERNAME (T# $ticket )"
-	        userprincipalname = "$sam@domain"
-	        EmailAddress = "$sam@domain"
-	        enabled = $true
-	        accountpassword = $password
-	        Otherattributes = @{proxyAddresses = ("SMTP:$sam" + "@domain"), ("SIP:$sam" + "@domain")}
-		    }
- new-aduser @newuser
-
-start-sleep -s 3
-
-Set-ADAccountExpiration -identity $sam -DateTime $enddate
-
-add-adgroupmember -identity "License - Enterprise Mobility Security E5" "$sam"
-
-Get-ADPrincipalGroupMembership -Identity $copyaccessfrom | Where-Object {$_.Name -like 'user*'} | Add-ADGroupMember -members $sam
-
- start-sleep -s 5
-
-Invoke-Command -ComputerName  -ScriptBlock {sync}
+    DisplayName = "$firstname $surname"
+    Name = "$firstname $surname"
+    SamAccountName = $sam
+    GivenName = $firstname
+    Surname = $surname
+    Company = "UK Finance"
+    Department = $dept.Department
+    Manager = $manager
+    Path = "OU=,OU=Managed Users,DC=,DC=,DC="
+    Title = $jobtitle
+    OfficePhone = " $tel"
+    Description = "Account created on $date by $env:USERNAME (T# $ticket)"
+    UserPrincipalName = "$sam@domain"
+    EmailAddress = "$sam@domain"
+    Enabled = $true
+    AccountPassword = $Password
 
 }
 
+New-ADUser @newuser
 
+Start-Sleep -Seconds 1
 
+if ($jobtitle -like "*Intern*") {
 
+    Set-ADAccountExpiration -Identity $sam -DateTime $enddate
 
+    Add-ADGroupMember -Identity "License - Microsoft 365 E5 No Teams" -Members $sam
+
+    set-aduser $sam -clear telephonenumber
+}
+
+else {
+
+    Set-ADUser $sam -Add @{
+        ProxyAddresses = @(
+            "SMTP:$sam@domain"
+            "SIP:$sam@domain"
+        )
+    }
+
+    Set-ADAccountExpiration -Identity $sam -DateTime $enddate
+
+    Add-ADGroupMember -Identity "License - Microsoft 365 E5 and Teams Pay As You Go Calling Plan" -Members $sam
+}
+
+$groups = @(
+"License - Microsoft Entra Private Access",
+"sec-EPA-Intranet",
+"sec-CP-DellCommandUpdate",
+"sec-CP-ZoomWorkSpace",
+"user-SPO-ukf-General",
+"Smartway2 Users",
+"Intune-users",
+"Zoom Outlook Users",
+"Zoom Meeting Organisers",
+"Exclaimer_AD_All_Staff"
+)
+
+foreach ($group in $groups) {
+    Add-ADGroupMember -Identity $group -Members $sam
+}
+
+Start-Sleep -Seconds 1
+
+Invoke-Command -ComputerName core-aadc-01 -ScriptBlock {
+    Start-ADSyncSyncCycle -PolicyType Delta
+}
+
+}
