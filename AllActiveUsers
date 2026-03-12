@@ -1,4 +1,20 @@
 function Get-AllActiveUsers {
 
-get-aduser -filter {enabled -eq $true} -SearchBase "OU=,OU=Managed Users,DC=,DC=,DC=" -Properties * | Select GivenName, Surname, title, Department, mail |  Sort GivenName 
+    $searchBase = "OU=,OU=Managed Users,DC=,DC=,DC="
+
+    $excludedUsers = @(
+      list
+    )
+
+    Get-ADUser `
+        -Filter "Enabled -eq 'True'" `
+        -SearchBase $searchBase `
+        -Properties GivenName, Surname, Title, Mail, Name |
+
+    Where-Object { $_.Name -notin $excludedUsers } |
+
+    Select-Object GivenName, Surname, Title, Mail |
+
+    Sort-Object GivenName |
+    Export-Csv "C:\temp\ActiveUsers.csv" -NoTypeInformation
 }
